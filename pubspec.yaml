@@ -1,0 +1,29 @@
+name: flutter_application
+description: "A new Flutter project."
+publish_to: 'none' 
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.6 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  fancy_on_boarding: ^1.8.0-nullsafety.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - lib\assets\banks.png
+    - lib\assets\hotels.png
+    - lib\assets\key.png
+    - lib\assets\shopping_cart.png
+    - lib\assets\stores.png
+    - lib\assets\wallet.png
