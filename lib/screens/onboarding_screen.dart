@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:fancy_on_boarding/fancy_on_boarding.dart';
+import 'package:flutter_application/screens/login_screen.dart';
 
 class OnboardingScreen extends StatelessWidget {
   final List<PageModel> pageList = [
     PageModel(
       color: const Color(0xFF678FB4),
       heroImagePath: 'lib/assets/hotels.png',
-      title: Text('Hotels',
+      title: Text('Sınav Asistanı',
           style: TextStyle(
             fontWeight: FontWeight.w800,
             color: Colors.white,
             fontSize: 34.0,
           )),
       body: Text(
-        'All hotels and hostels are sorted by hospitality rating',
+        'Sınav hazırlığınızı daha etkili hale getirin!',
         textAlign: TextAlign.center,
         style: TextStyle(
           color: Colors.white,
@@ -25,14 +26,14 @@ class OnboardingScreen extends StatelessWidget {
     PageModel(
       color: const Color(0xFF65B0B4),
       heroImagePath: 'lib/assets/banks.png',
-      title: Text('Banks',
+      title: Text('Hedef Belirleme',
           style: TextStyle(
             fontWeight: FontWeight.w800,
             color: Colors.white,
             fontSize: 34.0,
           )),
       body: Text(
-        'We carefully verify all banks before adding them into the app',
+        'Hedeflerinizi belirleyerek başarılı bir sınav dönemi geçirin.',
         textAlign: TextAlign.center,
         style: TextStyle(
           color: Colors.white,
@@ -44,14 +45,14 @@ class OnboardingScreen extends StatelessWidget {
     PageModel(
       color: const Color(0xFF9B90BC),
       heroImagePath: 'lib/assets/stores.png',
-      title: Text('Store',
+      title: Text('Soru Sorun',
           style: TextStyle(
             fontWeight: FontWeight.w800,
             color: Colors.white,
             fontSize: 34.0,
           )),
       body: Text(
-        'All local stores are categorized for your convenience',
+        'Herhangi bir sorunuz mu var? Uzmanlarımızdan anında cevap alın.',
         textAlign: TextAlign.center,
         style: TextStyle(
           color: Colors.white,
@@ -59,8 +60,30 @@ class OnboardingScreen extends StatelessWidget {
         ),
       ),
       icon: Icon(
-        Icons.shopping_cart,
+        Icons.question_answer,
         color: const Color(0xFF9B90BC),
+      ),
+    ),
+    PageModel(
+      color: const Color(0xFF34A853),
+      heroImagePath: 'lib/assets/stores.png',
+      title: Text('Yapay Zeka Önerileri',
+          style: TextStyle(
+            fontWeight: FontWeight.w800,
+            color: Colors.white,
+            fontSize: 34.0,
+          )),
+      body: Text(
+        'Yapay zeka destekli önerilerle en iyi çalışma yöntemlerinizi bulun.',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 18.0,
+        ),
+      ),
+      icon: Icon(
+        Icons.lightbulb,
+        color: const Color(0xFF34A853),
       ),
     ),
   ];
@@ -69,14 +92,24 @@ class OnboardingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FancyOnBoarding(
-        doneButtonText: "Done",
-        skipButtonText: "Skip",
+        doneButtonText: "Tamam",
+        skipButtonText: "Atla",
         pageList: pageList,
         onDoneButtonPressed: () {
-          Navigator.of(context).pushReplacementNamed('/home');
+          // Onboarding tamamlandığında Login ekranına yönlendir
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (context) => const LoginScreen(),
+            ),
+          );
         },
         onSkipButtonPressed: () {
-          Navigator.of(context).pushReplacementNamed('/home');
+          // Skip butonuna basıldığında Login ekranına yönlendir
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (context) => const LoginScreen(),
+            ),
+          );
         },
       ),
     );
