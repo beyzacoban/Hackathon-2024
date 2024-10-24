@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application/service/auth.dart';
+import 'package:flutter_application/service/auth.dart'; // Auth sınıfında Google Sign-In eklemeniz gerekecek
 import 'home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -41,6 +41,17 @@ class _LoginScreen extends State<LoginScreen> {
     } on FirebaseAuthException catch (e) {
       setState(() {
         errorMessage = e.message;
+      });
+    }
+  }
+
+  Future<void> signInWithGoogle() async {
+    try {
+      await Auth().signInWithGoogle(); // Auth sınıfında bu metodu tanımlayın
+      navigateToHomePage();
+    } catch (e) {
+      setState(() {
+        errorMessage = e.toString();
       });
     }
   }
@@ -151,6 +162,15 @@ class _LoginScreen extends State<LoginScreen> {
                           ? 'Create an Account'
                           : 'Already have an account? Login',
                       style: const TextStyle(color: Colors.black),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  GestureDetector(
+                    onTap: signInWithGoogle, // Google ile giriş fonksiyonu
+                    child: Image.asset(
+                      'lib/assets/google.png', // Google logosu
+                      width: 50,
+                      height: 50,
                     ),
                   ),
                 ],
