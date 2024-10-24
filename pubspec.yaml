@@ -13,22 +13,13 @@ dependencies:
   cupertino_icons: ^1.0.2
   fancy_on_boarding: ^1.8.0-nullsafety.0
   firebase_core: ^2.10.0
-<<<<<<< HEAD
-=======
-
->>>>>>> 08cf090c12e4c1e1228da177b5ce1fa3328ca40b
   firebase_core_platform_interface: 4.6.0
   firebase_analytics: ^10.2.0
   firebase_auth: ^4.4.0
   firebase_storage: ^11.1.0
-  cloud_firestore: ^4.5.0
-<<<<<<< HEAD
-  flutter_launcher_icons: 0.11.0
-
-=======
+  cloud_firestore: ^4.5.3
   google_sign_in: ^6.2.1
-google_sign_in: ^6.2.1
->>>>>>> 08cf090c12e4c1e1228da177b5ce1fa3328ca40b
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -37,26 +28,18 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  adaptive_icon_background: "#FFFFFF" # Android için
-  adaptive_icon_foreground: "lib/assets/icons/tree1.png" 
-  image_path: "lib/assets/icons/tree.png"
+  adaptive_icon_background: "#FFFFFF" 
+  adaptive_icon_foreground: "lib/assets/images/tree1.png" 
+  image_path: "lib/assets/images/tree1.png"
 
 flutter:
   uses-material-design: true
-<<<<<<< HEAD
-  assets:
-    - lib/assets/icons/
-  fonts:
-    - family: KitaharaBrush  # Yazı tipi ailesi adı
-      fonts:
-        - asset: lib/assets/fonts/KitaharaBrushScript.ttf
-=======
   assets:  
-    - lib\assets/google.png
-    - lib\assets\banks.png
-    - lib\assets\hotels.png
-    - lib\assets\key.png
-    - lib\assets\shopping_cart.png
-    - lib\assets\stores.png
-    - lib\assets\wallet.png
->>>>>>> 08cf090c12e4c1e1228da177b5ce1fa3328ca40b
+    - lib/assets/images/
+  
+ 
+  
+  fonts:
+    - family: KitaharaBrush 
+      fonts:
+        - asset: lib/assets/fonts/KitaharaBrushScript.ttf 

@@ -11,9 +11,8 @@ class NavigationbarScreen extends StatefulWidget {
 }
 
 class _NavigationbarScreenState extends State<NavigationbarScreen> {
-  int _currentIndex = 0; // Seçili öğeyi tutar
+  int _currentIndex = 0; 
 
-  // Farklı sayfaları içeren bir liste
   final List<Widget> _pages = <Widget>[
     const HomeScreen(),
     const SettingsScreen(),
@@ -22,14 +21,14 @@ class _NavigationbarScreenState extends State<NavigationbarScreen> {
 
   void _onItemTapped(int index) {
     setState(() {
-      _currentIndex = index; // Sayfa değişimi
+      _currentIndex = index; 
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_currentIndex], // Sayfa içeriği burada değişir
+      body: _pages[_currentIndex], 
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: _onItemTapped,

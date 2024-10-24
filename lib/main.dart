@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application/screens/navigationbar_screen.dart';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_application/screens/onboarding_screen.dart';
 import 'firebase_options.dart';
-
-
+import 'screens/home_screen.dart';
+import 'screens/login_screen.dart';
 
 
 Future<void> main() async {
@@ -29,9 +30,9 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) =>const NavigationbarScreen(),
-        //'/login': (context) => const LoginScreen(),
-        //'/home': (context) => HomeScreen(),
+        '/': (context) => OnboardingScreen(),
+        '/login': (context) => const LoginScreen(),
+        '/home': (context) => const HomeScreen(),
       },
     );
   }

@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application/service/auth.dart'; // Auth sınıfında Google Sign-In eklemeniz gerekecek
+import 'package:flutter_application/service/auth.dart';
 import 'home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -47,7 +47,7 @@ class _LoginScreen extends State<LoginScreen> {
 
   Future<void> signInWithGoogle() async {
     try {
-      await Auth().signInWithGoogle(); // Auth sınıfında bu metodu tanımlayın
+      await Auth().signInWithGoogle();
       navigateToHomePage();
     } catch (e) {
       setState(() {
@@ -143,7 +143,7 @@ class _LoginScreen extends State<LoginScreen> {
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed:
-                        isLogin ? signIn : register, // Kayıt ve giriş işlemleri
+                        isLogin ? signIn : register, 
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: Colors.black,
@@ -166,9 +166,9 @@ class _LoginScreen extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 10),
                   GestureDetector(
-                    onTap: signInWithGoogle, // Google ile giriş fonksiyonu
+                    onTap: signInWithGoogle,
                     child: Image.asset(
-                      'lib/assets/google.png', // Google logosu
+                      'lib/assets/images/google.png',
                       width: 50,
                       height: 50,
                     ),

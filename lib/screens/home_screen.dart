@@ -40,7 +40,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: MediaQuery.of(context).size.width,
                 color: Colors.black,
                 child: const Center(
-                  // Text widget'ını tam ortalamak için
                   child: Text(
                     "STUDY",
                     style: TextStyle(

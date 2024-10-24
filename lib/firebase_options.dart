@@ -7,21 +7,13 @@ import 'package:flutter/foundation.dart'
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
 /// Example:
-<<<<<<< HEAD
-/// dart
-=======
 /// ```dart
->>>>>>> 08cf090c12e4c1e1228da177b5ce1fa3328ca40b
 /// import 'firebase_options.dart';
 /// // ...
 /// await Firebase.initializeApp(
 ///   options: DefaultFirebaseOptions.currentPlatform,
 /// );
-<<<<<<< HEAD
-/// 
-=======
 /// ```
->>>>>>> 08cf090c12e4c1e1228da177b5ce1fa3328ca40b
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
@@ -93,8 +85,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'hackathon-2024-4a6c1.appspot.com',
     measurementId: 'G-2XYRD8X45Y',
   );
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 08cf090c12e4c1e1228da177b5ce1fa3328ca40b

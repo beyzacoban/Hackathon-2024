@@ -2,9 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class Auth {
-  User? get currentUser => _firebaseAuth.currentUser;
-  Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
+  User? get currentUser => _firebaseAuth.currentUser;
+
+  Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
 
   Future<void> createUser({
     required String email,
@@ -28,31 +30,32 @@ class Auth {
 
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
+    await GoogleSignIn().signOut(); 
   }
 
   Future<User?> signInWithGoogle() async {
-    // Oturum açma işlemi
-    final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
+    try {
+      final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
 
-    // Eğer kullanıcı giriş yapmadıysa null dönebilir
-    if (gUser == null) {
-      // Kullanıcı giriş yapmadı
-      print("Kullanıcı giriş yapmadı");
+      if (gUser == null) {
+        print("Kullanıcı giriş yapmadı");
+        return null;
+      }
+
+      final GoogleSignInAuthentication gAuth = await gUser.authentication;
+
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: gAuth.accessToken,
+        idToken: gAuth.idToken,
+      );
+
+      final UserCredential userCredential =
+          await _firebaseAuth.signInWithCredential(credential);
+
+      return userCredential.user;
+    } catch (e) {
+      print("Google ile girişte hata: $e");
       return null;
     }
-
-    // Süreç içerisinde bilgileri al
-    final GoogleSignInAuthentication gAuth = await gUser.authentication;
-
-    // Kullanıcı nesnesi oluştur
-    final credential = GoogleAuthProvider.credential(
-        accessToken: gAuth.accessToken, idToken: gAuth.idToken);
-
-    // Firebase ile kullanıcıyı doğrula
-    final UserCredential userCredential =
-        await _firebaseAuth.signInWithCredential(credential);
-
-    // Kullanıcı girişini sağla
-    return userCredential.user;
   }
 }
