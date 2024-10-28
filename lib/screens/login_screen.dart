@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application/service/auth.dart';
-import 'home_screen.dart';
+import 'package:flutter_application/screens/navigationbar_screen.dart';
+import 'package:flutter_application/service/auth.dart'; // Auth sınıfında Google Sign-In eklemeniz gerekecek
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -59,7 +60,7 @@ class _LoginScreen extends State<LoginScreen> {
   void navigateToHomePage() {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const HomeScreen()),
+      MaterialPageRoute(builder: (context) => const NavigationbarScreen()),
     );
   }
 
@@ -168,7 +169,7 @@ class _LoginScreen extends State<LoginScreen> {
                   GestureDetector(
                     onTap: signInWithGoogle,
                     child: Image.asset(
-                      'lib/assets/images/google.png',
+                      'lib/assets/images/google.png', // Google logosu
                       width: 50,
                       height: 50,
                     ),

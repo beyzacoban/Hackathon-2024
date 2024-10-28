@@ -19,6 +19,7 @@ dependencies:
   firebase_storage: ^11.1.0
   cloud_firestore: ^4.5.3
   google_sign_in: ^6.2.1
+  image_picker: ^0.8.4+8
 
 dev_dependencies:
   flutter_test:
@@ -28,7 +29,7 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  adaptive_icon_background: "#FFFFFF" 
+  adaptive_icon_background: "#FFFFFF" # Android için
   adaptive_icon_foreground: "lib/assets/images/tree1.png" 
   image_path: "lib/assets/images/tree1.png"
 
@@ -36,10 +37,15 @@ flutter:
   uses-material-design: true
   assets:  
     - lib/assets/images/
+    - lib/assets/fonts/
   
  
   
   fonts:
-    - family: KitaharaBrush 
+    - family: KitaharaBrush  # Font ailesinin adı
       fonts:
-        - asset: lib/assets/fonts/KitaharaBrushScript.ttf 
+        - asset: lib/assets/fonts/KitaharaBrushScript.ttf  # Font dosyasının yolu
+    - family: Lorjuk
+      fonts: 
+        - asset: lib/assets/fonts/Lorjuk.ttf
+  
