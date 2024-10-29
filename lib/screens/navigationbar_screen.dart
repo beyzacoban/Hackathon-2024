@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/screens/postSharing_screen.dart';
 import 'package:flutter_application/screens/profile_screen.dart';
-import 'package:flutter_application/screens/settings_screen.dart';
+import 'package:flutter_application/screens/search_screen.dart';
 import 'package:flutter_application/screens/home_screen.dart';
+import 'post_model.dart'; 
 
 class NavigationbarScreen extends StatefulWidget {
   const NavigationbarScreen({super.key});
@@ -12,17 +14,35 @@ class NavigationbarScreen extends StatefulWidget {
 
 class _NavigationbarScreenState extends State<NavigationbarScreen> {
   int _currentIndex = 0; 
+  final List<Post> _posts = []; 
 
-  final List<Widget> _pages = <Widget>[
-    const HomeScreen(),
-    const SettingsScreen(),
-    const ProfileScreen(),
-  ];
+  List<Widget> get _pages {
+    return [
+      const HomeScreen(),
+      const SearchScreen(),
+      const PostSharingScreen(),
+      const ProfileScreen(),
+    ];
+  }
 
   void _onItemTapped(int index) {
-    setState(() {
-      _currentIndex = index; 
-    });
+    if (index == 2) {
+      Navigator.of(context)
+          .push(MaterialPageRoute(
+              builder: (context) => const PostSharingScreen()))
+          .then((newPost) {
+        if (newPost is Post) {
+          setState(() {
+            _posts.add(newPost); 
+            _currentIndex = 3; 
+          });
+        }
+      });
+    } else {
+      setState(() {
+        _currentIndex = index; 
+      });
+    }
   }
 
   @override
@@ -32,28 +52,23 @@ class _NavigationbarScreenState extends State<NavigationbarScreen> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: _onItemTapped,
-        items: [
-          const BottomNavigationBarItem(
-              icon: Icon(
-                Icons.home,
-                color: Colors.black,
-              ),
-              label: ''),
+        items: const [
           BottomNavigationBarItem(
-              icon: Transform.scale(
-                scale: 1.2,
-                child: const Icon(
-                  Icons.search,
-                  color: Colors.black,
-                ),
-              ),
-              label: ''),
-          const BottomNavigationBarItem(
-              icon: Icon(
-                Icons.account_circle,
-                color: Colors.black,
-              ),
-              label: ''),
+            icon: Icon(Icons.home, color: Colors.black),
+            label: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search, color: Colors.black),
+            label: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add_a_photo_rounded, color: Colors.black),
+            label: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle, color: Colors.black),
+            label: '',
+          ),
         ],
       ),
     );

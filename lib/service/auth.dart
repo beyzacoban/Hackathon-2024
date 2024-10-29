@@ -30,7 +30,7 @@ class Auth {
 
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
-    await GoogleSignIn().signOut(); 
+    await GoogleSignIn().signOut();
   }
 
   Future<User?> signInWithGoogle() async {

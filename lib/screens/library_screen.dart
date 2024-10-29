@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
-class PlanScreen extends StatefulWidget {
-  const PlanScreen({super.key});
+
+class LibraryScreen extends StatefulWidget {
+  const LibraryScreen({super.key});
 
   @override
-  State<PlanScreen> createState() => _PlanScreenState();
+  State<LibraryScreen> createState() => _LibraryScreenState();
 }
 
-class _PlanScreenState extends State<PlanScreen> {
+class _LibraryScreenState extends State<LibraryScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -16,7 +17,7 @@ class _PlanScreenState extends State<PlanScreen> {
         home: Scaffold(
           appBar: AppBar(
             title: const Text(
-              "PLAN HARİTAM",
+              "KİTAPLIĞIM",
               style: TextStyle(
                 fontFamily: 'Lorjuk',
                 fontWeight: FontWeight.bold,

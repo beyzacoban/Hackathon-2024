@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/screens/ai_screen.dart';
+import 'package:flutter_application/screens/library_screen.dart';
 import 'package:flutter_application/screens/plan_screen.dart';
 import 'package:flutter_application/screens/settings_screen.dart';
 
@@ -20,6 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
             style: TextStyle(
               fontFamily: 'KitaharaBrush',
               fontSize: 36,
+              fontWeight: FontWeight.bold,
             ),
           ),
           centerTitle: true,
@@ -45,6 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: TextStyle(
                       fontFamily: 'KitaharaBrush',
                       fontSize: 36,
+                      fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
                   ),
@@ -70,15 +74,39 @@ class _HomeScreenState extends State<HomeScreen> {
                             ))
                       },
                     ),
-                    const ListTile(
-                      title: Text(
+                    ListTile(
+                      title: const Text(
                         "Kitaplığım",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
                         ),
                       ),
-                      leading: Icon(Icons.library_books_sharp),
+                      leading: const Icon(Icons.library_books_sharp),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const LibraryScreen(),
+                            ));
+                      },
+                    ),
+                    ListTile(
+                      title: const Text(
+                        "Sor",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+                      leading: const Icon(Icons.comment),
+                      onTap: () => {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const AiScreen(),
+                            ))
+                      },
                     ),
                     ListTile(
                       title: const Text(
@@ -105,7 +133,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         body: ListView(
           scrollDirection: Axis.vertical,
-          
         ),
       ),
     );

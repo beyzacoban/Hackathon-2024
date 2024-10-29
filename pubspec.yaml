@@ -19,6 +19,7 @@ dependencies:
   firebase_storage: ^11.1.0
   cloud_firestore: ^4.5.3
   google_sign_in: ^6.2.1
+  image_picker: ^0.8.4+8
 
 dev_dependencies:
   flutter_test:
@@ -36,10 +37,15 @@ flutter:
   uses-material-design: true
   assets:  
     - lib/assets/images/
+    - lib/assets/fonts/
   
  
   
   fonts:
-    - family: KitaharaBrush 
+    - family: KitaharaBrush  
       fonts:
-        - asset: lib/assets/fonts/KitaharaBrushScript.ttf 
+        - asset: lib/assets/fonts/KitaharaBrushScript.ttf  
+    - family: Lorjuk
+      fonts: 
+        - asset: lib/assets/fonts/Lorjuk.ttf
+  

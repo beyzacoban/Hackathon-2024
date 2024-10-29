@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class PlanScreen extends StatefulWidget {
-  const PlanScreen({super.key});
+class SecuritySettingsScreen extends StatefulWidget {
+  const SecuritySettingsScreen({super.key});
 
   @override
-  State<PlanScreen> createState() => _PlanScreenState();
+  State<SecuritySettingsScreen> createState() => _SecuritySettingsScreenState();
 }
 
-class _PlanScreenState extends State<PlanScreen> {
+class _SecuritySettingsScreenState extends State<SecuritySettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -16,14 +16,14 @@ class _PlanScreenState extends State<PlanScreen> {
         home: Scaffold(
           appBar: AppBar(
             title: const Text(
-              "PLAN HARİTAM",
+              "GÜVENLİK AYARLARI",
               style: TextStyle(
                 fontFamily: 'Lorjuk',
                 fontWeight: FontWeight.bold,
               ),
             ),
-            centerTitle: true,
             backgroundColor: Colors.blueGrey[100],
+            centerTitle: true,
             leading: IconButton(
                 onPressed: () {
                   Navigator.pop(context);
