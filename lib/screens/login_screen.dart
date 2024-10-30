@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application/screens/navigationbar_screen.dart';
 import 'package:flutter_application/service/auth.dart';
-import 'home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -13,11 +13,19 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreen extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
   bool isLogin = true;
   bool isPasswordVisible = false;
+  bool isConfirmPasswordVisible = false;
   String? errorMessage;
+  bool isLoading = false; // Loading state
 
   Future<void> signIn() async {
+    setState(() {
+      isLoading = true;
+    });
     try {
       await Auth().signIn(
         email: emailController.text,
@@ -26,32 +34,80 @@ class _LoginScreen extends State<LoginScreen> {
       navigateToHomePage();
     } on FirebaseAuthException catch (e) {
       setState(() {
-        errorMessage = e.message;
+        errorMessage = e.code == 'wrong-password'
+            ? 'Your password is incorrect.'
+            : e.code == 'user-not-found'
+                ? 'No user found for that email.'
+                : e.message;
+      });
+    } finally {
+      setState(() {
+        isLoading = false;
       });
     }
   }
 
   Future<void> register() async {
+    if (usernameController.text.isEmpty) {
+      setState(() {
+        errorMessage = 'Username is required.';
+      });
+      return;
+    }
+    if (passwordController.text != confirmPasswordController.text) {
+      setState(() {
+        errorMessage = 'Passwords do not match.';
+      });
+      return;
+    }
+
+    setState(() {
+      isLoading = true;
+    });
+
     try {
       await Auth().createUser(
         email: emailController.text,
         password: passwordController.text,
+        username: usernameController.text,
       );
-      navigateToHomePage();
+      setState(() {
+        isLogin = true;
+        emailController.clear();
+        passwordController.clear();
+        confirmPasswordController.clear();
+        usernameController.clear();
+        errorMessage = null;
+      });
     } on FirebaseAuthException catch (e) {
       setState(() {
-        errorMessage = e.message;
+        errorMessage = e.code == 'weak-password'
+            ? 'The password provided is too weak.'
+            : e.message;
+      });
+    } finally {
+      setState(() {
+        isLoading = false;
       });
     }
   }
 
   Future<void> signInWithGoogle() async {
+    setState(() {
+      isLoading = true;
+    });
     try {
-      await Auth().signInWithGoogle();
-      navigateToHomePage();
+      final user = await Auth().signInWithGoogle();
+      if (user != null) {
+        navigateToHomePage();
+      }
     } catch (e) {
       setState(() {
         errorMessage = e.toString();
+      });
+    } finally {
+      setState(() {
+        isLoading = false;
       });
     }
   }
@@ -59,7 +115,7 @@ class _LoginScreen extends State<LoginScreen> {
   void navigateToHomePage() {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const HomeScreen()),
+      MaterialPageRoute(builder: (context) => const NavigationbarScreen()),
     );
   }
 
@@ -68,6 +124,8 @@ class _LoginScreen extends State<LoginScreen> {
       isLogin = !isLogin;
       emailController.clear();
       passwordController.clear();
+      confirmPasswordController.clear();
+      usernameController.clear();
       errorMessage = null;
     });
   }
@@ -113,6 +171,12 @@ class _LoginScreen extends State<LoginScreen> {
                     style: const TextStyle(fontSize: 30, color: Colors.black),
                   ),
                   const SizedBox(height: 20),
+                  if (!isLogin)
+                    buildTextField(
+                      usernameController,
+                      "Username",
+                    ),
+                  const SizedBox(height: 10),
                   buildTextField(emailController, "Email"),
                   const SizedBox(height: 10),
                   buildTextField(
@@ -133,6 +197,26 @@ class _LoginScreen extends State<LoginScreen> {
                       },
                     ),
                   ),
+                  if (!isLogin)
+                    buildTextField(
+                      confirmPasswordController,
+                      "Confirm Password",
+                      obscureText: !isConfirmPasswordVisible,
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          isConfirmPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Colors.black,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            isConfirmPasswordVisible =
+                                !isConfirmPasswordVisible;
+                          });
+                        },
+                      ),
+                    ),
                   const SizedBox(height: 20),
                   if (errorMessage != null)
                     Text(
@@ -141,18 +225,21 @@ class _LoginScreen extends State<LoginScreen> {
                       style: const TextStyle(color: Colors.red),
                     ),
                   const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: isLogin ? signIn : register,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: Colors.black,
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
+                  if (isLoading)
+                    const Center(child: CircularProgressIndicator())
+                  else
+                    ElevatedButton(
+                      onPressed: isLogin ? signIn : register,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: Colors.black,
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
                       ),
+                      child: Text(isLogin ? 'Login' : 'Register'),
                     ),
-                    child: Text(isLogin ? 'Login' : 'Register'),
-                  ),
                   const SizedBox(height: 10),
                   TextButton(
                     onPressed: toggleLoginRegister,

@@ -1,31 +1,54 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class Auth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance; // Firestore instance
 
   User? get currentUser => _firebaseAuth.currentUser;
 
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
 
-  Future<void> createUser({
+  Future<User?> createUser({
     required String email,
     required String password,
+    required String username,
   }) async {
-    await _firebaseAuth.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+    try {
+      final UserCredential userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      User? user = userCredential.user;
+
+      // Save the username and email to Firestore
+      if (user != null) {
+        await _firestore.collection('users').doc(user.uid).set({
+          'username': username,
+          'email': email,
+        });
+      }
+      return user;
+    } catch (e) {
+      print("Error creating user: $e");
+      throw Exception("Failed to create user: $e");
+    }
   }
 
   Future<void> signIn({
     required String email,
     required String password,
   }) async {
-    await _firebaseAuth.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+    try {
+      await _firebaseAuth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+    } catch (e) {
+      print("Error signing in: $e");
+      throw Exception("Failed to sign in: $e");
+    }
   }
 
   Future<void> signOut() async {
@@ -38,8 +61,7 @@ class Auth {
       final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
 
       if (gUser == null) {
-        print("Kullanıcı giriş yapmadı");
-        return null;
+        throw Exception("User did not sign in with Google");
       }
 
       final GoogleSignInAuthentication gAuth = await gUser.authentication;
@@ -49,13 +71,20 @@ class Auth {
         idToken: gAuth.idToken,
       );
 
-      final UserCredential userCredential =
-          await _firebaseAuth.signInWithCredential(credential);
+      final UserCredential userCredential = await _firebaseAuth.signInWithCredential(credential);
+
+      // Save Google user details to Firestore if new user
+      if (userCredential.additionalUserInfo?.isNewUser ?? false) {
+        await _firestore.collection('users').doc(userCredential.user?.uid).set({
+          'username': userCredential.user?.displayName ?? 'Unknown',
+          'email': userCredential.user?.email,
+        });
+      }
 
       return userCredential.user;
     } catch (e) {
-      print("Google ile girişte hata: $e");
-      return null;
+      print("Error signing in with Google: $e");
+      throw Exception("Failed to sign in with Google: $e");
     }
   }
 }
