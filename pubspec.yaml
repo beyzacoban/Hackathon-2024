@@ -20,6 +20,7 @@ dependencies:
   cloud_firestore: ^4.5.3
   google_sign_in: ^6.2.1
   image_picker: ^0.8.4+8
+  uuid: ^3.0.4
   flutter_dotenv: ^5.2.1
   google_generative_ai: ^0.0.1-dev
   flutter_markdown: ^0.7.4+1

@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application/screens/navigationbar_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_application/service/auth.dart';
 import 'firebase_options.dart';
 import 'screens/login_screen.dart';
 import 'screens/onboarding_screen.dart';

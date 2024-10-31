@@ -1,20 +1,25 @@
 class Post {
-  final String content;
-  final String? imagePath;
+  String id;
+  String title;
+  String content;
+  String? imagePath; // Resim yolu için ekledim
 
-  Post({required this.content, this.imagePath});
+  Post({required this.id, required this.title, required this.content, this.imagePath});
 
   Map<String, dynamic> toMap() {
     return {
+      'title': title,
       'content': content,
-      'imagePath': imagePath,
+      'imagePath': imagePath, // Resim yolunu ekleyin
     };
   }
 
-  factory Post.fromMap(Map<String, dynamic> map) {
+  static Post fromMap(String id, Map<String, dynamic> map) {
     return Post(
-      content: map['content'] as String,
-      imagePath: map['imagePath'] as String?,
+      id: id,
+      title: map['title'] ?? '',
+      content: map['content'] ?? '',
+      imagePath: map['imagePath'], // Resim yolunu al
     );
   }
 }

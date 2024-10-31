@@ -16,41 +16,47 @@ class _PostSharingScreenState extends State<PostSharingScreen> {
   XFile? _image;
   final ImagePicker _picker = ImagePicker();
 
+  // Resim seçme fonksiyonu
   Future<void> _pickImage() async {
     final XFile? selectedImage =
         await _picker.pickImage(source: ImageSource.gallery);
     if (selectedImage != null) {
       setState(() {
-        _image = selectedImage;
+        _image = selectedImage; // Seçilen resmi duruma kaydet
       });
     }
   }
 
+  // Gönderiyi paylaşma fonksiyonu
   Future<void> _sharePost() async {
-  if (_postController.text.isNotEmpty || _image != null) {
-    final newPost = Post(content: _postController.text, imagePath: _image?.path);
-    try {
-      await FirebaseFirestore.instance.collection('posts').add(newPost.toMap());
+    if (_postController.text.isNotEmpty || _image != null) {
+      // Gönderi oluştur
+      final newPost = Post(
+        id: DateTime.now().toString(), // Benzersiz bir ID oluştur
+        title: "Yeni Gönderi", // Başlık, isteğe bağlı olarak değiştirilebilir
+        content: _postController.text,
+      );
+      try {
+        await FirebaseFirestore.instance.collection('posts').add(newPost.toMap());
 
-      if (mounted) {
-        Navigator.of(context).pop(newPost);
+        if (mounted) {
+          Navigator.of(context).pop(newPost); // Gönderiyi paylaştıktan sonra geri dön
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error sharing post: $e')),
+          );
+        }
       }
-    } catch (e) {
+    } else {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error sharing post: $e')),
+          const SnackBar(content: Text('Please add content or an image.')),
         );
       }
     }
-  } else {
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please add content or an image.')),
-      );
-    }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +75,7 @@ class _PostSharingScreenState extends State<PostSharingScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Metin girişi için TextField
             TextField(
               controller: _postController,
               maxLines: 5,
@@ -80,6 +87,7 @@ class _PostSharingScreenState extends State<PostSharingScreen> {
               ),
             ),
             const SizedBox(height: 20),
+            // Resim görüntüleme
             _image != null
                 ? Container(
                     color: Colors.amber,
@@ -89,11 +97,12 @@ class _PostSharingScreenState extends State<PostSharingScreen> {
                     child: Image.file(
                       File(_image!.path),
                       width: double.infinity,
-                      fit: BoxFit.scaleDown, 
+                      fit: BoxFit.scaleDown,
                     ),
                   )
                 : const SizedBox.shrink(),
             const SizedBox(height: 20),
+            // Resim ekleme butonu
             ElevatedButton.icon(
               onPressed: _pickImage,
               icon: const Icon(Icons.image),

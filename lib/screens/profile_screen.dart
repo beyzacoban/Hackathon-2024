@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'post_model.dart'; // Eğer bu model başka bir yerde kullanılıyorsa, buradan çıkarmayın.
+import 'post_model.dart'; // Post modelinizi ekleyin
 
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({Key? key}) : super(key: key);
@@ -14,7 +14,7 @@ class ProfileScreen extends StatelessWidget {
     if (user != null) {
       DocumentSnapshot userDoc =
           await _firestore.collection('users').doc(user.uid).get();
-      return userDoc.data() as Map<String, dynamic>?;
+      return userDoc.data() as Map<String, dynamic>?; // Profil verilerini al
     }
     return null;
   }
@@ -25,7 +25,7 @@ class ProfileScreen extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
-        body: FutureBuilder<Map<String, dynamic>?>(
+        body: FutureBuilder<Map<String, dynamic>?>( // Kullanıcı profilini almak için FutureBuilder
           future: _getUserProfile(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
@@ -37,23 +37,24 @@ class ProfileScreen extends StatelessWidget {
             final String username = userData['username'] ?? 'Username';
             final String? profileImage = userData['profileImage'] as String?;
 
+            // Debug: Profil resmini kontrol et
+            print("Profil Resmi URL: $profileImage");
+
             return Column(
               children: [
                 Container(
+                  color: Colors.transparent,
                   height: height_ / 4,
-                  color: Colors.amber[50],
                   child: Center(
                     child: Column(
                       children: [
                         CircleAvatar(
                           radius: 50,
-                          backgroundImage:
-                              profileImage != null && profileImage.isNotEmpty
-                                  ? NetworkImage(profileImage)
-                                  : null,
+                          backgroundImage: profileImage != null && profileImage.isNotEmpty
+                              ? NetworkImage(profileImage)
+                              : null,
                           child: profileImage == null || profileImage.isEmpty
-                              ? const Icon(Icons.account_circle,
-                                  size: 100, color: Colors.grey)
+                              ? const Icon(Icons.account_circle, size: 100, color: Colors.grey)
                               : null,
                         ),
                         Padding(
@@ -61,19 +62,21 @@ class ProfileScreen extends StatelessWidget {
                           child: Text(
                             name,
                             style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 24),
+                              fontWeight: FontWeight.bold, 
+                              fontSize: 24,
+                            ),
                           ),
                         ),
-                        // Kullanıcı adı yazısı kaldırıldı
                       ],
                     ),
                   ),
                 ),
-                // Diğer içerikler buraya eklenebilir
+                // Kullanıcının gönderileri
                 Expanded(
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection('posts')
+                        .where('userId', isEqualTo: _auth.currentUser?.uid)
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
@@ -81,7 +84,8 @@ class ProfileScreen extends StatelessWidget {
                       }
 
                       final posts = snapshot.data!.docs.map((doc) {
-                        return Post.fromMap(doc.data() as Map<String, dynamic>);
+                        return Post.fromMap(
+                            doc.id, doc.data() as Map<String, dynamic>);
                       }).toList();
 
                       if (posts.isEmpty) {
@@ -96,15 +100,20 @@ class ProfileScreen extends StatelessWidget {
                             child: Card(
                               color: Colors.amber,
                               child: ListTile(
-                                title: Text(posts[index].content),
-                                subtitle: posts[index].imagePath != null
-                                    ? Image.file(
+                                title: Text(posts[index].title),
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(posts[index].content),
+                                    if (posts[index].imagePath != null)
+                                      Image.file(
                                         File(posts[index].imagePath!),
                                         width: double.infinity,
                                         height: height_ / 3,
                                         fit: BoxFit.cover,
-                                      )
-                                    : null,
+                                      ),
+                                  ],
+                                ),
                               ),
                             ),
                           );
