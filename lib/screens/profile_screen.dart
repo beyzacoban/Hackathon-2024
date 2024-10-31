@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'post_model.dart'; // Post modelinizi ekleyin
+import 'post_model.dart'; 
 
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({Key? key}) : super(key: key);
@@ -14,7 +14,7 @@ class ProfileScreen extends StatelessWidget {
     if (user != null) {
       DocumentSnapshot userDoc =
           await _firestore.collection('users').doc(user.uid).get();
-      return userDoc.data() as Map<String, dynamic>?; // Profil verilerini al
+      return userDoc.data() as Map<String, dynamic>?; 
     }
     return null;
   }
@@ -25,7 +25,7 @@ class ProfileScreen extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
-        body: FutureBuilder<Map<String, dynamic>?>( // Kullanıcı profilini almak için FutureBuilder
+        body: FutureBuilder<Map<String, dynamic>?>( 
           future: _getUserProfile(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
@@ -37,7 +37,6 @@ class ProfileScreen extends StatelessWidget {
             final String username = userData['username'] ?? 'Username';
             final String? profileImage = userData['profileImage'] as String?;
 
-            // Debug: Profil resmini kontrol et
             print("Profil Resmi URL: $profileImage");
 
             return Column(
@@ -71,7 +70,6 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                // Kullanıcının gönderileri
                 Expanded(
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance

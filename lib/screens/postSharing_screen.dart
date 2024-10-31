@@ -16,31 +16,28 @@ class _PostSharingScreenState extends State<PostSharingScreen> {
   XFile? _image;
   final ImagePicker _picker = ImagePicker();
 
-  // Resim seçme fonksiyonu
   Future<void> _pickImage() async {
     final XFile? selectedImage =
         await _picker.pickImage(source: ImageSource.gallery);
     if (selectedImage != null) {
       setState(() {
-        _image = selectedImage; // Seçilen resmi duruma kaydet
+        _image = selectedImage;
       });
     }
   }
 
-  // Gönderiyi paylaşma fonksiyonu
   Future<void> _sharePost() async {
     if (_postController.text.isNotEmpty || _image != null) {
-      // Gönderi oluştur
       final newPost = Post(
-        id: DateTime.now().toString(), // Benzersiz bir ID oluştur
-        title: "Yeni Gönderi", // Başlık, isteğe bağlı olarak değiştirilebilir
+        id: DateTime.now().toString(), 
+        title: "Yeni Gönderi", 
         content: _postController.text,
       );
       try {
         await FirebaseFirestore.instance.collection('posts').add(newPost.toMap());
 
         if (mounted) {
-          Navigator.of(context).pop(newPost); // Gönderiyi paylaştıktan sonra geri dön
+          Navigator.of(context).pop(newPost); 
         }
       } catch (e) {
         if (mounted) {
@@ -87,7 +84,6 @@ class _PostSharingScreenState extends State<PostSharingScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            // Resim görüntüleme
             _image != null
                 ? Container(
                     color: Colors.amber,
@@ -102,7 +98,6 @@ class _PostSharingScreenState extends State<PostSharingScreen> {
                   )
                 : const SizedBox.shrink(),
             const SizedBox(height: 20),
-            // Resim ekleme butonu
             ElevatedButton.icon(
               onPressed: _pickImage,
               icon: const Icon(Icons.image),

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class UserProfileScreen extends StatelessWidget {
   final String uid;
 
-  UserProfileScreen({required this.uid});
+  const UserProfileScreen({super.key, required this.uid});
 
   Future<Map<String, dynamic>?> getUserProfile() async {
     DocumentSnapshot snapshot =

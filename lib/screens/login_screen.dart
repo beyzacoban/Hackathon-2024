@@ -17,12 +17,12 @@ class _LoginScreen extends State<LoginScreen> {
       TextEditingController();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController nameController =
-      TextEditingController(); // nameController eklendi
+      TextEditingController(); 
   bool isLogin = true;
   bool isPasswordVisible = false;
   bool isConfirmPasswordVisible = false;
   String? errorMessage;
-  bool isLoading = false; // Loading state
+  bool isLoading = false; 
 
   Future<void> signIn() async {
     setState(() {

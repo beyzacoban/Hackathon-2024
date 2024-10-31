@@ -36,10 +36,9 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
         final data = doc.data()!;
         _nameController.text = data['name'] ?? '';
         _usernameController.text = data['username'] ?? '';
-        // Profil resmini güncelle
         if (data['profileImage'] != null) {
           setState(() {
-            _selectedImage = null; // URL kullanılacak
+            _selectedImage = null; 
           });
         }
       }
@@ -63,22 +62,17 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
         throw Exception('Kullanıcı doğrulanmamış. Giriş yapın.');
       }
 
-      // UUID oluşturma
       var uuid = Uuid();
       String uniqueFileName =
-          '${user.uid}/${uuid.v4()}.jpg'; // Benzersiz dosya adı oluşturma
+          '${user.uid}/${uuid.v4()}.jpg'; 
 
-      // Dosya referansını oluşturma
       final ref = FirebaseStorage.instance
           .ref()
           .child('profile_images/$uniqueFileName');
 
-      // Yükleme işlemini başlatma
       final uploadTask = await ref.putFile(image);
 
-      // Yüklemenin tamamlandığını kontrol etme
       if (uploadTask.state == TaskState.success) {
-        // Yükleme tamamlandıktan sonra URL'yi alma
         String downloadUrl = await ref.getDownloadURL();
         print("Resim başarıyla yüklendi: $downloadUrl");
         return downloadUrl;
@@ -96,14 +90,12 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
 
     if (user == null) return;
 
-    // Veritabanından mevcut kullanıcı bilgilerini alıyoruz
     final doc = await FirebaseFirestore.instance
         .collection('users')
         .doc(user.uid)
         .get();
     final currentData = doc.data();
 
-    // Eğer mevcut kullanıcı verisi boş değilse, boş olup olmadığını kontrol et
     final name = _nameController.text.trim().isEmpty
         ? (currentData != null ? currentData['name'] ?? '' : '')
         : _nameController.text.trim();
@@ -114,11 +106,9 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
     String? imageUrl =
         currentData != null ? currentData['profileImage'] ?? '' : '';
 
-    // Eğer yeni bir resim seçilmişse, yükleme işlemi yapılacak
     if (_selectedImage != null) {
       imageUrl = await _uploadImage(_selectedImage!);
       if (imageUrl == null) {
-        // Eğer resim yüklenmezse hata mesajı göster
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Resim yüklenemedi!')),
         );
@@ -126,7 +116,6 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
       }
     }
 
-    // Kullanıcı bilgilerini güncelle
     await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
       'name': name,
       'username': username,

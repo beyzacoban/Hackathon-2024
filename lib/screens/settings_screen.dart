@@ -14,7 +14,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _signOut() async {
     await FirebaseAuth.instance.signOut();
     Navigator.of(context)
-        .pushReplacementNamed('/login'); // Giriş sayfasına yönlendirin
+        .pushReplacementNamed('/login'); 
   }
 
   @override
@@ -91,7 +91,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   fontSize: 20,
                 ),
               ),
-              onTap: _signOut, // Çıkış fonksiyonunu çağırır
+              onTap: _signOut,
               leading: const Icon(
                 Icons.logout_rounded,
                 color: Colors.red,

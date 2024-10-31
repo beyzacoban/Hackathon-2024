@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/screens/ai_screen.dart';
 import 'package:flutter_application/screens/postSharing_screen.dart';
 import 'package:flutter_application/screens/profile_screen.dart';
 import 'package:flutter_application/screens/search_screen.dart';
