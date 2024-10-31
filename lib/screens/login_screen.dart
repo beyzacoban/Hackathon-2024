@@ -16,6 +16,8 @@ class _LoginScreen extends State<LoginScreen> {
   final TextEditingController confirmPasswordController =
       TextEditingController();
   final TextEditingController usernameController = TextEditingController();
+  final TextEditingController nameController =
+      TextEditingController(); // nameController eklendi
   bool isLogin = true;
   bool isPasswordVisible = false;
   bool isConfirmPasswordVisible = false;
@@ -70,6 +72,7 @@ class _LoginScreen extends State<LoginScreen> {
         email: emailController.text,
         password: passwordController.text,
         username: usernameController.text,
+        name: nameController.text,
       );
       setState(() {
         isLogin = true;
@@ -77,6 +80,7 @@ class _LoginScreen extends State<LoginScreen> {
         passwordController.clear();
         confirmPasswordController.clear();
         usernameController.clear();
+        nameController.clear();
         errorMessage = null;
       });
     } on FirebaseAuthException catch (e) {
@@ -177,6 +181,12 @@ class _LoginScreen extends State<LoginScreen> {
                       "Username",
                     ),
                   const SizedBox(height: 10),
+                  if (!isLogin)
+                    buildTextField(
+                      nameController,
+                      "Name",
+                    ),
+                  const SizedBox(height: 10),
                   buildTextField(emailController, "Email"),
                   const SizedBox(height: 10),
                   buildTextField(
@@ -197,6 +207,7 @@ class _LoginScreen extends State<LoginScreen> {
                       },
                     ),
                   ),
+                  const SizedBox(height: 10),
                   if (!isLogin)
                     buildTextField(
                       confirmPasswordController,
@@ -231,7 +242,7 @@ class _LoginScreen extends State<LoginScreen> {
                     ElevatedButton(
                       onPressed: isLogin ? signIn : register,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
+                        backgroundColor: Colors.white10,
                         foregroundColor: Colors.black,
                         padding: const EdgeInsets.symmetric(vertical: 15),
                         shape: RoundedRectangleBorder(

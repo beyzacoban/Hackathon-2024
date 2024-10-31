@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/screens/profileSettings_screen.dart';
 import 'package:flutter_application/screens/securitySettingsScreen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -10,6 +11,12 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  Future<void> _signOut() async {
+    await FirebaseAuth.instance.signOut();
+    Navigator.of(context)
+        .pushReplacementNamed('/login'); // Giriş sayfasına yönlendirin
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -26,10 +33,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
           centerTitle: true,
           backgroundColor: Colors.blueGrey[100],
           leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: const Icon(Icons.arrow_back)),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.arrow_back),
+          ),
         ),
         body: ListView(
           children: [
@@ -47,10 +55,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               onTap: () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SecuritySettingsScreen(),
-                    ));
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SecuritySettingsScreen(),
+                  ),
+                );
               },
             ),
             ListTile(
@@ -63,14 +72,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               onTap: () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ProfileSettingsScreen(),
-                    ));
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ProfileSettingsScreen(),
+                  ),
+                );
               },
               leading: const Icon(
                 Icons.account_circle,
                 color: Colors.black,
+              ),
+            ),
+            ListTile(
+              title: const Text(
+                "Çıkış",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+              onTap: _signOut, // Çıkış fonksiyonunu çağırır
+              leading: const Icon(
+                Icons.logout_rounded,
+                color: Colors.red,
               ),
             ),
           ],

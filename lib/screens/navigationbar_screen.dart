@@ -3,7 +3,7 @@ import 'package:flutter_application/screens/postSharing_screen.dart';
 import 'package:flutter_application/screens/profile_screen.dart';
 import 'package:flutter_application/screens/search_screen.dart';
 import 'package:flutter_application/screens/home_screen.dart';
-import 'post_model.dart'; 
+import 'post_model.dart';
 
 class NavigationbarScreen extends StatefulWidget {
   const NavigationbarScreen({super.key});
@@ -13,15 +13,15 @@ class NavigationbarScreen extends StatefulWidget {
 }
 
 class _NavigationbarScreenState extends State<NavigationbarScreen> {
-  int _currentIndex = 0; 
-  final List<Post> _posts = []; 
+  int _currentIndex = 0;
+  final List<Post> _posts = [];
 
   List<Widget> get _pages {
     return [
       const HomeScreen(),
       const SearchScreen(),
       const PostSharingScreen(),
-      const ProfileScreen(),
+      ProfileScreen(),
     ];
   }
 
@@ -33,14 +33,14 @@ class _NavigationbarScreenState extends State<NavigationbarScreen> {
           .then((newPost) {
         if (newPost is Post) {
           setState(() {
-            _posts.add(newPost); 
-            _currentIndex = 3; 
+            _posts.add(newPost);
+            _currentIndex = 3;
           });
         }
       });
     } else {
       setState(() {
-        _currentIndex = index; 
+        _currentIndex = index;
       });
     }
   }
@@ -48,7 +48,7 @@ class _NavigationbarScreenState extends State<NavigationbarScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_currentIndex], 
+      body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: _onItemTapped,

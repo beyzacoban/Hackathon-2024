@@ -14,6 +14,7 @@ class Auth {
     required String email,
     required String password,
     required String username,
+    required String name,
   }) async {
     try {
       final UserCredential userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
@@ -27,6 +28,7 @@ class Auth {
         await _firestore.collection('users').doc(user.uid).set({
           'username': username,
           'email': email,
+          'name':name,
         });
       }
       return user;
