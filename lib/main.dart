@@ -6,9 +6,11 @@ import 'package:flutter_application/service/auth.dart';
 import 'firebase_options.dart';
 import 'screens/login_screen.dart';
 import 'screens/onboarding_screen.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
