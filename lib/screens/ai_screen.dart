@@ -5,7 +5,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AiScreen extends StatefulWidget {
@@ -36,7 +35,6 @@ class _AiScreenState extends State<AiScreen> {
         apiKey: apiKey!,
       );
       _initializeChatSession();
-      _loadConversation();
     }
   }
 
@@ -47,23 +45,6 @@ class _AiScreenState extends State<AiScreen> {
     } catch (e) {
       _showError('Chat session initialization failed: $e');
     }
-  }
-
-  Future<void> _loadConversation() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? savedConversation = prefs.getString('conversation');
-    if (savedConversation != null) {
-      List<dynamic> decodedConversation = jsonDecode(savedConversation);
-      setState(() {
-        _conversation.addAll(
-            decodedConversation.map((e) => Map<String, String>.from(e)));
-      });
-    }
-  }
-
-  Future<void> _saveConversation() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('conversation', jsonEncode(_conversation));
   }
 
   Future<void> _sendChatMessage(String message) async {
@@ -89,7 +70,6 @@ class _AiScreenState extends State<AiScreen> {
         _loading = false;
         _scrollDown();
       });
-      await _saveConversation();
     } catch (e) {
       _showError(e.toString());
       setState(() {
@@ -176,7 +156,7 @@ class _AiScreenState extends State<AiScreen> {
                         );
                       },
                     )
-                  : const Center(child: Text('Loading...')),
+                  : const Center(child: CircularProgressIndicator()),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -190,10 +170,21 @@ class _AiScreenState extends State<AiScreen> {
                         hintText: 'Ask me anything...',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(14),
+                          borderSide: const BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(14),
+                          borderSide: const BorderSide(color: Colors.blue),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(14),
+                          borderSide: const BorderSide(color: Colors.grey),
                         ),
                       ),
                       onSubmitted: (String value) {
-                        _sendChatMessage(value);
+                        if (value.isNotEmpty) {
+                          _sendChatMessage(value);
+                        }
                       },
                     ),
                   ),
@@ -204,6 +195,7 @@ class _AiScreenState extends State<AiScreen> {
                       }
                     },
                     icon: const Icon(Icons.send),
+                    color: Colors.blue,
                   ),
                 ],
               ),
@@ -240,8 +232,7 @@ class MessageWidget extends StatelessWidget {
           child: Container(
             constraints: const BoxConstraints(maxWidth: 600),
             decoration: BoxDecoration(
-              color:
-                  isFromUser ? Colors.green[200] : Colors.grey.withOpacity(0.2),
+              color: isFromUser ? Colors.blue[200] : Colors.grey[300],
               borderRadius: BorderRadius.circular(18),
             ),
             padding: const EdgeInsets.symmetric(

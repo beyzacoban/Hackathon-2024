@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_application/screens/ai_screen.dart';
 import 'firebase_options.dart';
 import 'screens/login_screen.dart';
 import 'screens/onboarding_screen.dart';
