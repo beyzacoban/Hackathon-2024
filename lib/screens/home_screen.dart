@@ -96,29 +96,17 @@ class _HomeScreenState extends State<HomeScreen> {
                             fontSize: 20,
                           ),
                         ),
-                      ),
-                      leading: const Icon(Icons.comment),
-                      onTap: () => {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const AiScreen(),
-                            ))
-                      },
-                    ),
-                    ListTile(
-                      title: const Text(
-                        "Ayarlar",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
+                        leading: const Icon(
+                          Icons.comment,
+                          size: 25,
+                          color: Colors.black,
                         ),
-                        onTap: () {
+                        onTap: () => {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const LibraryScreen(),
-                              ));
+                                builder: (context) => const AiScreen(),
+                              ))
                         },
                       ),
                       ListTile(
@@ -129,7 +117,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             fontSize: 20,
                           ),
                         ),
-                        leading: const Icon(Icons.bar_chart),
+                        leading: const Icon(
+                          Icons.bar_chart,
+                          size: 25,
+                          color: Colors.black,
+                        ),
                         onTap: () {
                           Navigator.push(
                               context,

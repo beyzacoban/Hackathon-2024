@@ -6,11 +6,7 @@ import 'post_model.dart'; // Post modelinizi ekleyin
 class UserProfileScreen extends StatefulWidget {
   final String userId; // Başka bir kullanıcının userId'si
 
-<<<<<<< HEAD
   const UserProfileScreen({Key? key, required this.userId}) : super(key: key);
-=======
-  const UserProfileScreen({super.key, required this.uid});
->>>>>>> e0e37d913fde8c946c0a0498794468b5791dd24f
 
   @override
   _UserProfileScreenState createState() => _UserProfileScreenState();
@@ -137,11 +133,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                     10), // Kenar yuvarlama
                               ),
                               elevation: 5, // Gölge efekti
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 12, horizontal: 20),
+
                               fixedSize: Size(
                                   MediaQuery.of(context).size.width / 2.5,
-                                  MediaQuery.of(context).size.height / 15),
+                                  MediaQuery.of(context).size.height / 18),
                             ),
                             onPressed: () {
                               // Takip et butonuna tıklandığında yapılacak işlemler
@@ -150,7 +145,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               "Takip et",
                               style: TextStyle(
                                 color: Colors.black, // Buton metni rengi
-                                fontSize: 18,
+                                fontSize: 15,
                               ),
                             ),
                           ),
@@ -162,11 +157,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                     10), // Kenar yuvarlama
                               ),
                               elevation: 5, // Gölge efekti
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 12, horizontal: 20),
+
                               fixedSize: Size(
                                   MediaQuery.of(context).size.width / 2.5,
-                                  MediaQuery.of(context).size.height / 15),
+                                  MediaQuery.of(context).size.height / 18),
                             ),
                             onPressed: () {
                               // Takip et butonuna tıklandığında yapılacak işlemler
@@ -175,7 +169,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               "Mesaj",
                               style: TextStyle(
                                 color: Colors.black, // Buton metni rengi
-                                fontSize: 18,
+                                fontSize: 15,
                               ),
                             ),
                           ),

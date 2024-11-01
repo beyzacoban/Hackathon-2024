@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'post_model.dart'; 
+import 'post_model.dart'; // Post modelinizi ekleyin
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -20,7 +20,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (user != null) {
       DocumentSnapshot userDoc =
           await _firestore.collection('users').doc(user.uid).get();
-      return userDoc.data() as Map<String, dynamic>?; 
+      return userDoc.data() as Map<String, dynamic>?; // Profil verilerini al
     }
     return null;
   }
@@ -47,7 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return SafeArea(
       child: Scaffold(
-        body: FutureBuilder<Map<String, dynamic>?>( 
+        body: FutureBuilder<Map<String, dynamic>?>(
           future: _getUserProfile(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
@@ -59,32 +59,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
             final String userName = userData['username'] ?? 'Ad';
             final String? profileImage = userData['profileImage'] as String?;
 
-            print("Profil Resmi URL: $profileImage");
-
-            return Column(
-              children: [
-                Container(
-                  color: Colors.transparent,
-                  height: height_ / 4,
-                  child: Center(
-                    child: Column(
-                      children: [
-                        CircleAvatar(
-                          radius: 50,
-                          backgroundImage: profileImage != null && profileImage.isNotEmpty
-                              ? NetworkImage(profileImage)
-                              : null,
-                          child: profileImage == null || profileImage.isEmpty
-                              ? const Icon(Icons.account_circle, size: 100, color: Colors.grey)
-                              : null,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            name,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold, 
-                              fontSize: 24,
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(color: Colors.black, width: 1),
+                      ),
+                    ),
+                    height: height_ / 4,
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 6.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.black, // Border rengi
+                                  width: 3.0, // Border kalınlığı
+                                ),
+                              ),
+                              child: CircleAvatar(
+                                  radius: 50,
+                                  backgroundColor: Colors.grey[300],
+                                  backgroundImage: profileImage != null &&
+                                          profileImage.isNotEmpty
+                                      ? NetworkImage(profileImage)
+                                      : const AssetImage(
+                                              "lib/assets/images/avatar.png")
+                                          as ImageProvider<Object>?),
                             ),
                           ),
                           Padding(
@@ -101,13 +108,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                   ),
-<<<<<<< HEAD
 
                   // Kullanıcının gönderileri
                   StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection('posts')
                         .where('userId',
+                            isEqualTo:
                                 _auth.currentUser?.uid) // userId ile filtreleme
                         .snapshots(),
                     builder: (context, snapshot) {

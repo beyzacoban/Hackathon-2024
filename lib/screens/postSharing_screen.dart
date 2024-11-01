@@ -33,9 +33,21 @@ class _PostSharingScreenState extends State<PostSharingScreen> {
     User? currentUser = _auth.currentUser;
 
     if (_postController.text.isNotEmpty || _image != null) {
+      String? imageUrl;
+
+      if (_image != null) {
+        // Resmi Firebase Storage'a yükleme
+        final storageRef = FirebaseStorage.instance
+            .ref()
+            .child('post_images/${DateTime.now().millisecondsSinceEpoch}.png');
+
+        await storageRef.putFile(File(_image!.path));
+        imageUrl = await storageRef.getDownloadURL();
+      }
+
       final newPost = Post(
-        id: DateTime.now().toString(), 
-        title: "Yeni Gönderi", 
+        id: DateTime.now().toString(),
+        title: "Yeni Gönderi",
         content: _postController.text,
         imagePath: imageUrl, // Resim URL'sini gönderiye ekle
         userId: currentUser?.uid,
@@ -48,7 +60,7 @@ class _PostSharingScreenState extends State<PostSharingScreen> {
             .add(newPost.toMap());
 
         if (mounted) {
-          Navigator.of(context).pop(newPost); 
+          Navigator.of(context).pop(newPost);
         }
       } catch (e) {
         if (mounted) {

@@ -17,8 +17,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Future<void> _signOut() async {
     await _auth.signOut();
-    Navigator.of(context)
-        .pushReplacementNamed('/login'); 
+    Navigator.of(context).pushReplacementNamed('/login');
   }
 
   Future<void> _deleteAccount() async {
@@ -167,12 +166,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   fontSize: 20,
                 ),
               ),
-<<<<<<< HEAD
-              onTap: () =>
-                  _showConfirmationDialog('signOut'), // Onay penceresini göster
-=======
-              onTap: _signOut,
->>>>>>> e0e37d913fde8c946c0a0498794468b5791dd24f
+              onTap: () => _showConfirmationDialog('signOut'),
               leading: const Icon(
                 Icons.logout_outlined,
                 color: Colors.red,
