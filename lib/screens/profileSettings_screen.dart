@@ -15,9 +15,12 @@ class ProfileSettingsScreen extends StatefulWidget {
 
 class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
   File? _selectedImage;
+  String?
+      _profileImageUrl; // Firebase'den gelen mevcut profil resmi URL'sini saklayacak
   final ImagePicker _picker = ImagePicker();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
+  String? _selectedClassLevel;
 
   @override
   void initState() {
@@ -36,12 +39,10 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
         final data = doc.data()!;
         _nameController.text = data['name'] ?? '';
         _usernameController.text = data['username'] ?? '';
-        // Profil resmini güncelle
-        if (data['profileImage'] != null) {
-          setState(() {
-            _selectedImage = null; // URL kullanılacak
-          });
-        }
+        _selectedClassLevel = data['classLevel'] ?? '9.Sınıf';
+        setState(() {
+          _profileImageUrl = data['profileImage'] ?? '';
+        });
       }
     }
   }
@@ -64,7 +65,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
       }
 
       // UUID oluşturma
-      var uuid = Uuid();
+      var uuid = const Uuid();
       String uniqueFileName =
           '${user.uid}/${uuid.v4()}.jpg'; // Benzersiz dosya adı oluşturma
 
@@ -110,6 +111,8 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
     final username = _usernameController.text.trim().isEmpty
         ? (currentData != null ? currentData['username'] ?? '' : '')
         : _usernameController.text.trim();
+    final classLevel = _selectedClassLevel ??
+        (currentData != null ? currentData['classLevel'] ?? '' : '');
 
     String? imageUrl =
         currentData != null ? currentData['profileImage'] ?? '' : '';
@@ -131,14 +134,8 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
       'name': name,
       'username': username,
       'profileImage': imageUrl ?? '',
+      'classLevel': classLevel,
     });
-
-    print("Kullanıcı profili başarıyla kaydedildi.");
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Profil bilgileri kaydedildi!')));
-      Navigator.pop(context);
-    }
   }
 
   void _closeKeyboard(BuildContext context) {
@@ -157,7 +154,14 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("PROFİL AYARLARI"),
+          title: const Text(
+            "PROFİL AYARLARI",
+            style: TextStyle(
+              fontFamily: 'Lorjuk',
+              fontWeight: FontWeight.bold,
+              fontSize: 28,
+            ),
+          ),
           backgroundColor: Colors.blueGrey[100],
           centerTitle: true,
           leading: IconButton(
@@ -179,31 +183,38 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                         padding: const EdgeInsets.only(top: 5),
                         child: Column(
                           children: [
-                            CircleAvatar(
-                              radius: 50,
-                              backgroundImage: _selectedImage != null
-                                  ? FileImage(_selectedImage!)
-                                  : null,
-                              child: _selectedImage == null
-                                  ? const Icon(Icons.account_circle,
-                                      size: 100, color: Colors.grey)
-                                  : null,
+                            Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.black, // Border rengi
+                                  width: 3.0, // Border kalınlığı
+                                ),
+                              ),
+                              child: CircleAvatar(
+                                radius: 50,
+                                backgroundColor: Colors.grey[100],
+                                backgroundImage: _selectedImage != null
+                                    ? FileImage(_selectedImage!)
+                                    : (_profileImageUrl != null &&
+                                            _profileImageUrl!.isNotEmpty
+                                        ? NetworkImage(_profileImageUrl!)
+                                        : const AssetImage(
+                                                "lib/assets/images/avatar.png")
+                                            as ImageProvider),
+                              ),
                             ),
                             GestureDetector(
                               onTap: () {
-                                _pickImage();
+                                _showImageOptions(); // Resim seçeneklerini göster
                               },
                               child: Container(
                                 padding: const EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.blueGrey[100],
-                                ),
                                 child: const Text(
                                   "Profili düzenle",
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 20,
+                                    fontSize: 22,
                                   ),
                                 ),
                               ),
@@ -214,25 +225,90 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(12.0),
+                    padding: const EdgeInsets.fromLTRB(10.0, 8.0, 10.0, 8.0),
                     child: TextField(
                       controller: _nameController,
                       decoration: const InputDecoration(
-                          hintText: "Ad", border: OutlineInputBorder()),
+                          hintText: "Ad",
+                          labelText: "Ad",
+                          labelStyle: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 85, 77, 77),
+                          ),
+                          border: OutlineInputBorder()),
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(12.0),
+                    padding: const EdgeInsets.fromLTRB(10.0, 8.0, 10.0, 8.0),
                     child: TextField(
                       controller: _usernameController,
                       decoration: const InputDecoration(
                           hintText: "Kullanıcı Adı",
+                          labelText: "Kullanıcı Adı",
+                          labelStyle: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 85, 77, 77),
+                          ),
                           border: OutlineInputBorder()),
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                  ElevatedButton(
-                    onPressed: _saveProfile,
-                    child: const Text("Kaydet"),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10.0, 8.0, 10.0, 8.0),
+                    child: DropdownButtonFormField<String>(
+                      value: _selectedClassLevel,
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: "Sınıf Seviyesi",
+                          labelStyle: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 85, 77, 77),
+                            fontSize: 20,
+                          )),
+                      items: ['9.Sınıf', '10.Sınıf', '11.Sınıf', '12.Sınıf']
+                          .map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                              )),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedClassLevel = value;
+                        });
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        _saveProfile();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Profil güncellendi!')),
+                        );
+                      },
+                      child: const Text(
+                        "Kaydet",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -241,5 +317,64 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
         ),
       ),
     );
+  }
+
+  // Resim seçeneklerini gösteren fonksiyon
+  void _showImageOptions() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Profil Resmi"),
+          content: const Text(
+              "Profil resmini değiştirmek veya silmek ister misiniz?"),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("Yeni Profil Resmi"),
+              onPressed: () async {
+                Navigator.of(context).pop(); // Diyalog penceresini kapat
+                _pickImage(); // Resim seçme fonksiyonunu çağır
+              },
+            ),
+            TextButton(
+              child: const Text("Sil"),
+              onPressed: () async {
+                // Mevcut profil resmini silme işlemi
+                await _deleteProfileImage();
+                Navigator.of(context).pop(); // Diyalog penceresini kapat
+              },
+            ),
+            TextButton(
+              child: const Text("İptal"),
+              onPressed: () {
+                Navigator.of(context).pop(); // Diyalog penceresini kapat
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // Profil resmini silme fonksiyonu
+  Future<void> _deleteProfileImage() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      // Firebase Firestore'dan kullanıcı belgesini güncelle
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .update({
+        'profileImage': '',
+      });
+      setState(() {
+        _profileImageUrl = null; // State'i güncelle
+        _selectedImage = null; // Seçilen resmi sıfırla
+      });
+      // Başarılı bir silme işlemi için bir Snackbar göster
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Profil resmi silindi!')),
+      );
+    }
   }
 }

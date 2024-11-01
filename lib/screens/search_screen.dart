@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application/screens/userProfile_screen.dart';
+// Kullanıcı profil ekranını ekleyin
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -10,7 +12,8 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   String searchQuery = '';
-  List<String> searchResults = [];
+  List<Map<String, dynamic>> searchResults =
+      []; // Kullanıcı bilgilerini tutacak liste
 
   Future<void> searchUsernames(String query) async {
     if (query.isEmpty) {
@@ -23,13 +26,19 @@ class _SearchScreenState extends State<SearchScreen> {
     QuerySnapshot snapshot = await FirebaseFirestore.instance
         .collection('users')
         .where('username', isGreaterThanOrEqualTo: query)
-        .where('username', isLessThan: query + '\uf8ff')
+        .where('username', isLessThan: '$query\uf8ff')
         .get();
 
-    List<String> usernames = snapshot.docs.map((doc) => doc['username'] as String).toList();
+    // Kullanıcı bilgilerini (userId ve username) al
+    List<Map<String, dynamic>> users = snapshot.docs.map((doc) {
+      return {
+        'userId': doc.id, // Kullanıcı ID'si
+        'username': doc['username'], // Kullanıcı adı
+      };
+    }).toList();
 
     setState(() {
-      searchResults = usernames;
+      searchResults = users; // Artık List<Map<String, dynamic>> türünde
     });
   }
 
@@ -43,7 +52,7 @@ class _SearchScreenState extends State<SearchScreen> {
               setState(() {
                 searchQuery = value;
               });
-              searchUsernames(value); 
+              searchUsernames(value);
             },
             decoration: InputDecoration(
               hintText: "Search user-name...",
@@ -55,8 +64,8 @@ class _SearchScreenState extends State<SearchScreen> {
                 borderRadius: BorderRadius.circular(30.0),
                 borderSide: BorderSide.none,
               ),
-              contentPadding: const EdgeInsets.symmetric(
-                  vertical: 10.0, horizontal: 20.0),
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
             ),
           ),
         ),
@@ -66,7 +75,18 @@ class _SearchScreenState extends State<SearchScreen> {
                 itemCount: searchResults.length,
                 itemBuilder: (context, index) {
                   return ListTile(
-                    title: Text(searchResults[index]),
+                    title: Text(searchResults[index]
+                        ['username']), // Kullanıcı adını göster
+                    onTap: () {
+                      // Kullanıcı adına tıkladığında UserProfileScreen'i aç
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UserProfileScreen(
+                              userId: searchResults[index]['userId']),
+                        ),
+                      );
+                    },
                   );
                 },
               ),

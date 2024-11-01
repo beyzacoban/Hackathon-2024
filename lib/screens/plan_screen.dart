@@ -62,6 +62,7 @@ class _PlanScreenState extends State<PlanScreen> {
               style: TextStyle(
                 fontFamily: 'Lorjuk',
                 fontWeight: FontWeight.bold,
+                fontSize: 36,
               ),
             ),
             centerTitle: true,
