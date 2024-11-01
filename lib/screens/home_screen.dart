@@ -96,10 +96,22 @@ class _HomeScreenState extends State<HomeScreen> {
                             fontSize: 20,
                           ),
                         ),
-                        leading: const Icon(
-                          Icons.library_books_sharp,
-                          size: 25,
-                          color: Colors.black,
+                      ),
+                      leading: const Icon(Icons.comment),
+                      onTap: () => {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const AiScreen(),
+                            ))
+                      },
+                    ),
+                    ListTile(
+                      title: const Text(
+                        "Ayarlar",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
                         ),
                         onTap: () {
                           Navigator.push(

@@ -16,18 +16,14 @@ class _LoginScreen extends State<LoginScreen> {
   final TextEditingController confirmPasswordController =
       TextEditingController();
   final TextEditingController usernameController = TextEditingController();
-  final TextEditingController nameController =
-      TextEditingController(); // nameController eklendi
+  final TextEditingController nameController = TextEditingController();
+
   bool isLogin = true;
   bool isPasswordVisible = false;
   bool isConfirmPasswordVisible = false;
   String? errorMessage;
-  bool isLoading = false; // Loading state
-
+  bool isLoading = false;
   Future<void> signIn() async {
-    setState(() {
-      isLoading = true;
-    });
     try {
       await Auth().signIn(
         email: emailController.text,
@@ -36,29 +32,37 @@ class _LoginScreen extends State<LoginScreen> {
       navigateToHomePage();
     } on FirebaseAuthException catch (e) {
       setState(() {
-        errorMessage = e.code == 'wrong-password'
-            ? 'Your password is incorrect.'
-            : e.code == 'user-not-found'
-                ? 'No user found for that email.'
-                : e.message;
+        errorMessage = "E-posta veya şifre yanlış.";
       });
-    } finally {
+    }
+    if (emailController.text.isEmpty) {
       setState(() {
+        errorMessage = 'E-posta gerekli.';
         isLoading = false;
       });
+      return;
+    }
+
+    if (passwordController.text.isEmpty) {
+      setState(() {
+        errorMessage = 'Şifre gerekli.';
+        isLoading = false;
+      });
+      return;
     }
   }
 
   Future<void> register() async {
     if (usernameController.text.isEmpty) {
       setState(() {
-        errorMessage = 'Username is required.';
+        errorMessage = 'Kullanıcı adı gerekli.';
       });
       return;
     }
+
     if (passwordController.text != confirmPasswordController.text) {
       setState(() {
-        errorMessage = 'Passwords do not match.';
+        errorMessage = 'Şifreler eşleşmiyor.';
       });
       return;
     }
@@ -85,9 +89,8 @@ class _LoginScreen extends State<LoginScreen> {
       });
     } on FirebaseAuthException catch (e) {
       setState(() {
-        errorMessage = e.code == 'weak-password'
-            ? 'The password provided is too weak.'
-            : e.message;
+        errorMessage =
+            e.code == 'weak-password' ? 'Verilen şifre çok zayıf.' : e.message;
       });
     } finally {
       setState(() {
@@ -145,9 +148,7 @@ class _LoginScreen extends State<LoginScreen> {
       obscureText: obscureText,
       decoration: InputDecoration(
         hintText: hintText,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
         filled: true,
         fillColor: Colors.white.withOpacity(0.5),
         suffixIcon: suffixIcon,
@@ -171,27 +172,21 @@ class _LoginScreen extends State<LoginScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    isLogin ? 'Welcome Back!' : 'Create an Account',
+                    isLogin ? 'Hoş Geldiniz!' : 'Bir Hesap Oluşturun',
                     style: const TextStyle(fontSize: 30, color: Colors.black),
                   ),
                   const SizedBox(height: 20),
-                  if (!isLogin)
-                    buildTextField(
-                      usernameController,
-                      "Username",
-                    ),
-                  const SizedBox(height: 10),
-                  if (!isLogin)
-                    buildTextField(
-                      nameController,
-                      "Name",
-                    ),
-                  const SizedBox(height: 10),
-                  buildTextField(emailController, "Email"),
+                  if (!isLogin) ...[
+                    buildTextField(usernameController, "Kullanıcı Adı"),
+                    const SizedBox(height: 10),
+                    buildTextField(nameController, "Ad"),
+                    const SizedBox(height: 10),
+                  ],
+                  buildTextField(emailController, "E-posta"),
                   const SizedBox(height: 10),
                   buildTextField(
                     passwordController,
-                    "Password",
+                    "Şifre",
                     obscureText: !isPasswordVisible,
                     suffixIcon: IconButton(
                       icon: Icon(
@@ -211,7 +206,7 @@ class _LoginScreen extends State<LoginScreen> {
                   if (!isLogin)
                     buildTextField(
                       confirmPasswordController,
-                      "Confirm Password",
+                      "Şifreyi Onayla",
                       obscureText: !isConfirmPasswordVisible,
                       suffixIcon: IconButton(
                         icon: Icon(
@@ -249,15 +244,15 @@ class _LoginScreen extends State<LoginScreen> {
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                       ),
-                      child: Text(isLogin ? 'Login' : 'Register'),
+                      child: Text(isLogin ? 'Giriş Yap' : 'Kaydol'),
                     ),
                   const SizedBox(height: 10),
                   TextButton(
                     onPressed: toggleLoginRegister,
                     child: Text(
                       isLogin
-                          ? 'Create an Account'
-                          : 'Already have an account? Login',
+                          ? 'Bir Hesap Oluştur'
+                          : 'Zaten bir hesabınız var mı? Giriş yapın',
                       style: const TextStyle(color: Colors.black),
                     ),
                   ),

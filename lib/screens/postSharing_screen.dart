@@ -19,7 +19,6 @@ class _PostSharingScreenState extends State<PostSharingScreen> {
   final ImagePicker _picker = ImagePicker();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // Resim seçme fonksiyonu
   Future<void> _pickImage() async {
     final XFile? selectedImage =
         await _picker.pickImage(source: ImageSource.gallery);
@@ -30,41 +29,13 @@ class _PostSharingScreenState extends State<PostSharingScreen> {
     }
   }
 
-  // Resmi Firebase Storage'a yükleme fonksiyonu
-  Future<String?> _uploadImageToFirebase() async {
-    if (_image != null) {
-      try {
-        // Storage referansı oluştur
-        final storageRef = FirebaseStorage.instance
-            .ref()
-            .child('post_images/${DateTime.now().millisecondsSinceEpoch}.jpg');
-
-        // Dosyayı yükle
-        UploadTask uploadTask = storageRef.putFile(File(_image!.path));
-        TaskSnapshot snapshot = await uploadTask;
-
-        // Yüklenen resmin URL'sini al
-        return await snapshot.ref.getDownloadURL();
-      } catch (e) {
-        print("Resim yüklenirken hata: $e");
-        return null;
-      }
-    }
-    return null;
-  }
-
-  // Gönderiyi paylaşma fonksiyonu
   Future<void> _sharePost() async {
     User? currentUser = _auth.currentUser;
 
     if (_postController.text.isNotEmpty || _image != null) {
-      // Resmi yükle ve URL'sini al
-      String? imageUrl = await _uploadImageToFirebase();
-      print("Image URL: $imageUrl");
-      // Gönderi oluştur
       final newPost = Post(
-        id: DateTime.now().toString(),
-        title: "Yeni Gönderi",
+        id: DateTime.now().toString(), 
+        title: "Yeni Gönderi", 
         content: _postController.text,
         imagePath: imageUrl, // Resim URL'sini gönderiye ekle
         userId: currentUser?.uid,
@@ -77,8 +48,7 @@ class _PostSharingScreenState extends State<PostSharingScreen> {
             .add(newPost.toMap());
 
         if (mounted) {
-          Navigator.of(context)
-              .pop(newPost); // Gönderiyi paylaştıktan sonra geri dön
+          Navigator.of(context).pop(newPost); 
         }
       } catch (e) {
         if (mounted) {
@@ -128,7 +98,7 @@ class _PostSharingScreenState extends State<PostSharingScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
             _image != null
                 ? Container(
                     constraints: const BoxConstraints(maxHeight: 200),

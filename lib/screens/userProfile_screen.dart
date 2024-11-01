@@ -6,7 +6,11 @@ import 'post_model.dart'; // Post modelinizi ekleyin
 class UserProfileScreen extends StatefulWidget {
   final String userId; // Başka bir kullanıcının userId'si
 
+<<<<<<< HEAD
   const UserProfileScreen({Key? key, required this.userId}) : super(key: key);
+=======
+  const UserProfileScreen({super.key, required this.uid});
+>>>>>>> e0e37d913fde8c946c0a0498794468b5791dd24f
 
   @override
   _UserProfileScreenState createState() => _UserProfileScreenState();

@@ -28,14 +28,12 @@ class _PlanScreenState extends State<PlanScreen> {
     loadTasks();
   }
 
-  // Görevleri kaydetme fonksiyonu
   Future<void> saveTasks() async {
     final prefs = await SharedPreferences.getInstance();
-    final taskJson = jsonEncode(taskLists); // Görev listesini JSON'a çevir
-    await prefs.setString('taskLists', taskJson); // JSON'u kaydet
+    final taskJson = jsonEncode(taskLists);
+    await prefs.setString('taskLists', taskJson);
   }
 
-  // Görevleri yükleme fonksiyonu
   Future<void> loadTasks() async {
     final prefs = await SharedPreferences.getInstance();
     final String? taskJson = prefs.getString('taskLists');
@@ -48,6 +46,20 @@ class _PlanScreenState extends State<PlanScreen> {
         ));
       });
     }
+  }
+
+  Color setButtonColor(String label) {
+    final tasks = taskLists[label] ?? [];
+    if (tasks.isEmpty) {
+      return Colors.blueGrey; // Görev yoksa gri
+    }
+    bool allCompleted = tasks.every((task) => task['isCompleted'] == true);
+    if (allCompleted) {
+      return const Color.fromARGB(
+          255, 13, 132, 74); // Tüm görevler tamamlandıysa yeşil
+    }
+    return const Color.fromARGB(
+        255, 224, 44, 32); // En az bir görev varsa kırmızı
   }
 
   @override
@@ -104,7 +116,7 @@ class _PlanScreenState extends State<PlanScreen> {
         },
         child: CircleAvatar(
           radius: 25,
-          backgroundColor: Colors.blueGrey,
+          backgroundColor: setButtonColor(label),
           child: Text(label),
         ),
       ),
@@ -151,7 +163,8 @@ class _PlanScreenState extends State<PlanScreen> {
                                     setModalState(() {
                                       task['isCompleted'] = value ?? false;
                                     });
-                                    saveTasks(); // Durumu kaydet
+                                    saveTasks();
+                                    setState(() {}); // Renk güncellemesi için
                                   },
                                 ),
                                 Expanded(
@@ -163,7 +176,8 @@ class _PlanScreenState extends State<PlanScreen> {
                                     setModalState(() {
                                       taskLists[label]?.removeAt(index);
                                     });
-                                    saveTasks(); // Görevi sildiğinde kaydet
+                                    saveTasks();
+                                    setState(() {}); // Renk güncellemesi için
                                   },
                                 ),
                               ],
@@ -187,7 +201,8 @@ class _PlanScreenState extends State<PlanScreen> {
                               });
                               _taskController.clear();
                             });
-                            saveTasks(); // Yeni görev eklenince kaydet
+                            saveTasks();
+                            setState(() {}); // Renk güncellemesi için
                           }
                         },
                         child: const Text("Ekle"),
@@ -196,7 +211,7 @@ class _PlanScreenState extends State<PlanScreen> {
                   ),
                   Positioned(
                     right: 0,
-                    top: 0,
+                    top: 25,
                     child: IconButton(
                       onPressed: () {
                         Navigator.pop(context);
