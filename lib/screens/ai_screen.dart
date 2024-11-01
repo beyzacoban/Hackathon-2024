@@ -1,11 +1,12 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AiScreen extends StatefulWidget {
   const AiScreen({super.key});
@@ -17,6 +18,7 @@ class AiScreen extends StatefulWidget {
 class _AiScreenState extends State<AiScreen> {
   String? apiKey;
   final TextEditingController _questionController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
   final List<Map<String, String>> _conversation = [];
   late final GenerativeModel _model;
   ChatSession? _chat;
@@ -25,25 +27,43 @@ class _AiScreenState extends State<AiScreen> {
   @override
   void initState() {
     super.initState();
-    apiKey = dotenv.env['API_KEY']; 
+    apiKey = dotenv.env['API_KEY'];
     if (apiKey == null || apiKey!.isEmpty) {
-      _showError('API key is missing. Please check your .env file.');
+      _showError('API key is missing.');
     } else {
       _model = GenerativeModel(
         model: 'gemini-pro',
         apiKey: apiKey!,
       );
       _initializeChatSession();
+      _loadConversation();
     }
   }
 
   Future<void> _initializeChatSession() async {
     try {
       _chat = _model.startChat();
-      setState(() {}); 
+      setState(() {});
     } catch (e) {
       _showError('Chat session initialization failed: $e');
     }
+  }
+
+  Future<void> _loadConversation() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? savedConversation = prefs.getString('conversation');
+    if (savedConversation != null) {
+      List<dynamic> decodedConversation = jsonDecode(savedConversation);
+      setState(() {
+        _conversation.addAll(
+            decodedConversation.map((e) => Map<String, String>.from(e)));
+      });
+    }
+  }
+
+  Future<void> _saveConversation() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('conversation', jsonEncode(_conversation));
   }
 
   Future<void> _sendChatMessage(String message) async {
@@ -67,7 +87,9 @@ class _AiScreenState extends State<AiScreen> {
       setState(() {
         _conversation.add({'user': message, 'ai': text});
         _loading = false;
+        _scrollDown();
       });
+      await _saveConversation();
     } catch (e) {
       _showError(e.toString());
       setState(() {
@@ -76,6 +98,18 @@ class _AiScreenState extends State<AiScreen> {
     } finally {
       _questionController.clear();
     }
+  }
+
+  void _scrollDown() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(const Duration(milliseconds: 100), () {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 750),
+          curve: Curves.easeOutCirc,
+        );
+      });
+    });
   }
 
   void _showError(String message) {
@@ -105,6 +139,7 @@ class _AiScreenState extends State<AiScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          title: const Text('AI Assistant'),
           backgroundColor: Colors.blueGrey[100],
           leading: IconButton(
             onPressed: () {
@@ -118,12 +153,26 @@ class _AiScreenState extends State<AiScreen> {
             Expanded(
               child: apiKey != null
                   ? ListView.builder(
+                      controller: _scrollController,
                       itemCount: _conversation.length,
                       itemBuilder: (context, index) {
                         var message = _conversation[index];
-                        return MessageWidget(
-                          text: message['user'] ?? '',
-                          isFromUser: true,
+                        return Column(
+                          crossAxisAlignment: message['user'] != null
+                              ? CrossAxisAlignment.end
+                              : CrossAxisAlignment.start,
+                          children: [
+                            if (message['user'] != null)
+                              MessageWidget(
+                                text: message['user'] ?? '',
+                                isFromUser: true,
+                              ),
+                            if (message['ai'] != null)
+                              MessageWidget(
+                                text: message['ai'] ?? '',
+                                isFromUser: false,
+                              ),
+                          ],
                         );
                       },
                     )
@@ -143,6 +192,9 @@ class _AiScreenState extends State<AiScreen> {
                           borderRadius: BorderRadius.circular(14),
                         ),
                       ),
+                      onSubmitted: (String value) {
+                        _sendChatMessage(value);
+                      },
                     ),
                   ),
                   IconButton(
@@ -188,9 +240,8 @@ class MessageWidget extends StatelessWidget {
           child: Container(
             constraints: const BoxConstraints(maxWidth: 600),
             decoration: BoxDecoration(
-              color: isFromUser
-                  ? Colors.green[200] 
-                  : Colors.grey.withOpacity(0.2), 
+              color:
+                  isFromUser ? Colors.green[200] : Colors.grey.withOpacity(0.2),
               borderRadius: BorderRadius.circular(18),
             ),
             padding: const EdgeInsets.symmetric(
@@ -203,10 +254,8 @@ class MessageWidget extends StatelessWidget {
               data: text,
               styleSheet: MarkdownStyleSheet(
                 p: TextStyle(
-                  fontSize: 16.0, // Increase the text size
-                  color: isFromUser
-                      ? Colors.black // User message text color
-                      : Colors.black87, // AI message text color
+                  fontSize: 16.0,
+                  color: isFromUser ? Colors.black : Colors.black87,
                 ),
               ),
             ),
