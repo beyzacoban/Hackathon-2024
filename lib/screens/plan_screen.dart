@@ -78,7 +78,7 @@ class _PlanScreenState extends State<PlanScreen> {
               ),
             ),
             centerTitle: true,
-            backgroundColor: Colors.blueGrey[100],
+            backgroundColor: Colors.green[300],
             leading: IconButton(
                 onPressed: () {
                   Navigator.pop(context);
@@ -144,7 +144,7 @@ class _PlanScreenState extends State<PlanScreen> {
                     children: [
                       const SizedBox(height: 32),
                       Text(
-                        "Görev $label",
+                        "Gün $label",
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 20),
                       ),

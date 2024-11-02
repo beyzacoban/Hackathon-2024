@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application/screens/userProfile_screen.dart';
-// Kullanıcı profil ekranını ekleyin
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -12,8 +11,7 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   String searchQuery = '';
-  List<Map<String, dynamic>> searchResults =
-      []; // Kullanıcı bilgilerini tutacak liste
+  List<Map<String, dynamic>> searchResults = [];
 
   Future<void> searchUsernames(String query) async {
     if (query.isEmpty) {
@@ -29,17 +27,21 @@ class _SearchScreenState extends State<SearchScreen> {
         .where('username', isLessThan: '$query\uf8ff')
         .get();
 
-    // Kullanıcı bilgilerini (userId ve username) al
     List<Map<String, dynamic>> users = snapshot.docs.map((doc) {
       return {
-        'userId': doc.id, // Kullanıcı ID'si
-        'username': doc['username'], // Kullanıcı adı
+        'userId': doc.id,
+        'username': doc['username'],
       };
     }).toList();
 
     setState(() {
-      searchResults = users; // Artık List<Map<String, dynamic>> türünde
+      searchResults = users;
     });
+  }
+
+  String getInitials(String username) {
+    if (username.isEmpty) return '';
+    return username[0].toUpperCase();
   }
 
   @override
@@ -70,23 +72,38 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
         ),
         body: searchResults.isEmpty
-            ? const Center(child: Text('No users found'))
+            ? const Center(child: Text('Kullanıcı bulunumadı!'))
             : ListView.builder(
                 itemCount: searchResults.length,
                 itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(searchResults[index]
-                        ['username']), // Kullanıcı adını göster
-                    onTap: () {
-                      // Kullanıcı adına tıkladığında UserProfileScreen'i aç
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => UserProfileScreen(
-                              userId: searchResults[index]['userId']),
+                  return Card(
+                    elevation: 2,
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 16.0),
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: Colors.black,
+                        child: Text(
+                          getInitials(searchResults[index]['username']),
+                          style: const TextStyle(color: Colors.white),
                         ),
-                      );
-                    },
+                      ),
+                      title: Text(
+                        searchResults[index]['username'],
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      trailing:
+                          Icon(Icons.arrow_forward, color: Colors.grey[600]),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => UserProfileScreen(
+                                userId: searchResults[index]['userId']),
+                          ),
+                        );
+                      },
+                    ),
                   );
                 },
               ),

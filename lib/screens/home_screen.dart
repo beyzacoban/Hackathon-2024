@@ -9,6 +9,7 @@ import 'package:flutter_application/screens/plan_screen.dart';
 import 'package:flutter_application/screens/settings_screen.dart';
 import 'package:flutter_application/screens/books_screen.dart';
 import 'package:flutter_application/screens/test_screen.dart';
+import 'package:flutter_application/screens/timer_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -166,7 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       ListTile(
                         title: const Text(
-                          "Müzikler",
+                          "Şarkılar",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
@@ -182,6 +183,27 @@ class _HomeScreenState extends State<HomeScreen> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => SongsScreen(),
+                              ));
+                        },
+                      ),
+                      ListTile(
+                        title: const Text(
+                          "Kronometre",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        leading: const Icon(
+                          Icons.timer,
+                          size: 25,
+                          color: Colors.black,
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const TimerScreen(),
                               ));
                         },
                       ),
