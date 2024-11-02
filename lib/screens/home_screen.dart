@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application/main.dart';
 import 'package:flutter_application/screens/ai_screen.dart';
 import 'package:flutter_application/screens/library_screen.dart';
+import 'package:flutter_application/screens/message_screen.dart';
 import 'package:flutter_application/screens/movies_screen.dart';
 import 'package:flutter_application/screens/musics_screen.dart';
 import 'package:flutter_application/screens/plan_screen.dart';
@@ -32,6 +33,17 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           centerTitle: true,
           backgroundColor: Colors.blueGrey[100],
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const MessageScreen(),
+                      ));
+                },
+                icon: const Icon(Icons.message_rounded)),
+          ],
           leading: Builder(builder: (context) {
             return IconButton(
                 onPressed: () {
