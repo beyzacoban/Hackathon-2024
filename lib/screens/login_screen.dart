@@ -13,8 +13,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreen extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController =
-      TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
 
@@ -23,6 +22,7 @@ class _LoginScreen extends State<LoginScreen> {
   bool isConfirmPasswordVisible = false;
   String? errorMessage;
   bool isLoading = false;
+
   Future<void> signIn() async {
     try {
       await Auth().signIn(
@@ -89,8 +89,7 @@ class _LoginScreen extends State<LoginScreen> {
       });
     } on FirebaseAuthException catch (e) {
       setState(() {
-        errorMessage =
-            e.code == 'weak-password' ? 'Verilen şifre çok zayıf.' : e.message;
+        errorMessage = e.code == 'weak-password' ? 'Verilen şifre çok zayıf.' : e.message;
       });
     } finally {
       setState(() {
@@ -115,6 +114,26 @@ class _LoginScreen extends State<LoginScreen> {
     } finally {
       setState(() {
         isLoading = false;
+      });
+    }
+  }
+
+  Future<void> resetPassword() async {
+    if (emailController.text.isEmpty) {
+      setState(() {
+        errorMessage = 'E-posta gerekli.';
+      });
+      return;
+    }
+
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: emailController.text);
+      setState(() {
+        errorMessage = 'Şifre sıfırlama bağlantısı e-posta adresinize gönderildi.';
+      });
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        errorMessage = 'Hata: ${e.message}';
       });
     }
   }
@@ -154,11 +173,9 @@ class _LoginScreen extends State<LoginScreen> {
           filled: true,
           fillColor: Colors.white.withOpacity(0.8),
           suffixIcon: suffixIcon,
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+          contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
         ),
-        style: const TextStyle(
-            color: Colors.black, fontSize: 18), // Increased font size
+        style: const TextStyle(color: Colors.black, fontSize: 18),
       ),
     );
   }
@@ -167,9 +184,9 @@ class _LoginScreen extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [ Color(0xFF678FB4),Color(0xFF65B0B4)],
+            colors: [Color(0xFF678FB4), Color(0xFF65B0B4)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -184,7 +201,7 @@ class _LoginScreen extends State<LoginScreen> {
                 Text(
                   isLogin ? 'Hoş Geldiniz!' : 'Bir Hesap Oluşturun!',
                   style: const TextStyle(
-                    fontSize: 34, // Increased font size for title
+                    fontSize: 34,
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
@@ -202,9 +219,7 @@ class _LoginScreen extends State<LoginScreen> {
                   obscureText: !isPasswordVisible,
                   suffixIcon: IconButton(
                     icon: Icon(
-                      isPasswordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off,
+                      isPasswordVisible ? Icons.visibility : Icons.visibility_off,
                       color: Colors.black,
                     ),
                     onPressed: () {
@@ -221,9 +236,7 @@ class _LoginScreen extends State<LoginScreen> {
                     obscureText: !isConfirmPasswordVisible,
                     suffixIcon: IconButton(
                       icon: Icon(
-                        isConfirmPasswordVisible
-                            ? Icons.visibility
-                            : Icons.visibility_off,
+                        isConfirmPasswordVisible ? Icons.visibility : Icons.visibility_off,
                         color: Colors.black,
                       ),
                       onPressed: () {
@@ -239,9 +252,10 @@ class _LoginScreen extends State<LoginScreen> {
                     errorMessage!,
                     textAlign: TextAlign.center,
                     style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18), // Increased font size for error message
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
                   ),
                 const SizedBox(height: 20),
                 if (isLoading)
@@ -251,7 +265,7 @@ class _LoginScreen extends State<LoginScreen> {
                     onPressed: isLogin ? signIn : register,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
-                      foregroundColor: Color(0xFF65B0B4),
+                      foregroundColor: const Color(0xFF65B0B4),
                       padding: const EdgeInsets.symmetric(vertical: 15),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30.0),
@@ -259,8 +273,7 @@ class _LoginScreen extends State<LoginScreen> {
                     ),
                     child: Text(
                       isLogin ? 'Giriş Yap' : 'Kaydol',
-                      style: const TextStyle(
-                          fontSize: 18), // Increased font size for button text
+                      style: const TextStyle(fontSize: 18),
                     ),
                   ),
                 const SizedBox(height: 10),
@@ -270,9 +283,14 @@ class _LoginScreen extends State<LoginScreen> {
                     isLogin
                         ? 'Bir Hesap Oluştur'
                         : 'Zaten bir hesabınız var mı? Giriş yapın',
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16), // Increased font size for button text
+                    style: const TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                ),
+                TextButton(
+                  onPressed: resetPassword,
+                  child: const Text(
+                    'Şifremi Unuttum',
+                    style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ),
                 const SizedBox(height: 10),

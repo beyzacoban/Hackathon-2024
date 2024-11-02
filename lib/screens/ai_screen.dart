@@ -1,11 +1,7 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
-import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
 
 class AiScreen extends StatefulWidget {
   const AiScreen({super.key});
@@ -82,13 +78,11 @@ class _AiScreenState extends State<AiScreen> {
 
   void _scrollDown() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Future.delayed(const Duration(milliseconds: 100), () {
-        _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 750),
-          curve: Curves.easeOutCirc,
-        );
-      });
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeOut,
+      );
     });
   }
 
@@ -120,7 +114,7 @@ class _AiScreenState extends State<AiScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('AI Assistant'),
-          backgroundColor: Colors.blueGrey[100],
+          backgroundColor: const Color(0xFF678FB4),
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
@@ -174,7 +168,8 @@ class _AiScreenState extends State<AiScreen> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(14),
-                          borderSide: const BorderSide(color: Colors.blue),
+                          borderSide:
+                              const BorderSide(color: Color(0xFF678FB4)),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(14),
@@ -234,6 +229,13 @@ class MessageWidget extends StatelessWidget {
             decoration: BoxDecoration(
               color: isFromUser ? Colors.blue[200] : Colors.grey[300],
               borderRadius: BorderRadius.circular(18),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 4,
+                  offset: Offset(2, 2),
+                ),
+              ],
             ),
             padding: const EdgeInsets.symmetric(
               vertical: 15,
