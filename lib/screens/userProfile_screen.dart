@@ -51,18 +51,19 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         .collection('following')
         .doc(widget.userId);
 
-    if (isFollowing) {
-      // Takipten çık
-      await followingRef.delete();
-    } else {
-      // Takip et
-      await followingRef.set({});
-    }
-
     // Takip durumunu güncelle
     setState(() {
-      isFollowing = !isFollowing;
+      isFollowing = !isFollowing; // Takip durumunu değiştir
     });
+
+    if (isFollowing) {
+      // Takip et
+      await followingRef.set({}); // Kullanıcıyı takip et
+    } else {
+      // Takipten çık
+      await followingRef.delete(); // Kullanıcıyı takipten çık
+    }
+    
   }
 
   @override
