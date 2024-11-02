@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'chat_screen.dart';
 import 'post_model.dart'; // Post modelinizi ekleyin
 
 class UserProfileScreen extends StatefulWidget {
@@ -207,7 +208,16 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                     MediaQuery.of(context).size.height / 18),
                               ),
                               onPressed: () {
-                                // Mesaj gönder butonuna tıklandığında yapılacak işlemler
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ChatScreen(
+                                      userId: widget.userId,
+                                      username: '',
+                                      friendName: '',
+                                    ),
+                                  ),
+                                );
                               },
                               child: const Text(
                                 "Mesaj",
