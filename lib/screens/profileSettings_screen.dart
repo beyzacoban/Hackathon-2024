@@ -134,6 +134,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
       'name': name,
       'username': username,
       'profileImage': imageUrl ?? '',
+      'classLevel': classLevel,
     });
 
     print("Kullanıcı profili başarıyla kaydedildi.");
@@ -280,8 +281,13 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                             color: Color.fromARGB(255, 85, 77, 77),
                             fontSize: 20,
                           )),
-                      items: ['9.Sınıf', '10.Sınıf', '11.Sınıf', '12.Sınıf']
-                          .map((String value) {
+                      items: [
+                        '9.Sınıf',
+                        '10.Sınıf',
+                        '11.Sınıf',
+                        '12.Sınıf',
+                        'Mezun'
+                      ].map((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Text(value,
