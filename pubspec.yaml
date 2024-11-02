@@ -27,6 +27,7 @@ dependencies:
   flutter_dotenv: ^5.2.1
   flutter_markdown: ^0.7.4+1
   shared_preferences: ^2.0.15
+  fl_chart: ^0.69.0
 
 
 dev_dependencies:
