@@ -8,6 +8,7 @@ import 'package:flutter_application/screens/musics_screen.dart';
 import 'package:flutter_application/screens/plan_screen.dart';
 import 'package:flutter_application/screens/settings_screen.dart';
 import 'package:flutter_application/screens/test_screen.dart';
+import 'package:flutter_application/screens/timer_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -163,16 +164,17 @@ class _HomeScreenState extends State<HomeScreen> {
                               ));
                         },
                       ),
+                     
                       ListTile(
                         title: const Text(
-                          "Müzikler",
+                          "Kronometre",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
                           ),
                         ),
                         leading: const Icon(
-                          Icons.music_note,
+                          Icons.timer,
                           size: 25,
                           color: Colors.black,
                         ),
@@ -180,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const MusicsScreen(),
+                                builder: (context) => const TimerScreen(),
                               ));
                         },
                       ),
