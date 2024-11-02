@@ -70,7 +70,7 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
         ),
         body: searchResults.isEmpty
-            ? Center(child: Text('No users found'))
+            ? const Center(child: Text('No users found'))
             : ListView.builder(
                 itemCount: searchResults.length,
                 itemBuilder: (context, index) {

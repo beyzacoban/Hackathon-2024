@@ -50,13 +50,10 @@ class _MessageScreenState extends State<MessageScreen> {
             followingUsers = usernames; // Kullanıcı adlarını listeye ata
           });
         } else {
-          print("Takip edilen kullanıcı yok.");
         }
       } else {
-        print("Kullanıcı belgesi bulunamadı.");
       }
     } else {
-      print("Kullanıcı oturum açmamış.");
     }
   }
 

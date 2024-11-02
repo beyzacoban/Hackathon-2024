@@ -102,7 +102,7 @@ class _TestScreenState extends State<TestScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       DropdownButtonFormField<String>(
-                        decoration: InputDecoration(labelText: 'Deneme Türü'),
+                        decoration: const InputDecoration(labelText: 'Deneme Türü'),
                         items: turler.map((tur) {
                           return DropdownMenuItem(
                             value: tur,
@@ -121,10 +121,10 @@ class _TestScreenState extends State<TestScreen> {
                           return null;
                         },
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       ListView.builder(
                         shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
+                        physics: const NeverScrollableScrollPhysics(),
                         itemCount: dersler.length,
                         itemBuilder: (context, index) {
                           dogruControllers.add(TextEditingController());
@@ -135,14 +135,14 @@ class _TestScreenState extends State<TestScreen> {
                             children: [
                               Text(
                                 dersler[index],
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                               TextFormField(
                                 controller: dogruControllers[index],
-                                decoration: InputDecoration(labelText: 'Doğru'),
+                                decoration: const InputDecoration(labelText: 'Doğru'),
                                 keyboardType: TextInputType.number,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
@@ -154,7 +154,7 @@ class _TestScreenState extends State<TestScreen> {
                               TextFormField(
                                 controller: yanlisControllers[index],
                                 decoration:
-                                    InputDecoration(labelText: 'Yanlış'),
+                                    const InputDecoration(labelText: 'Yanlış'),
                                 keyboardType: TextInputType.number,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
@@ -165,7 +165,7 @@ class _TestScreenState extends State<TestScreen> {
                               ),
                               TextFormField(
                                 controller: bosControllers[index],
-                                decoration: InputDecoration(labelText: 'Boş'),
+                                decoration: const InputDecoration(labelText: 'Boş'),
                                 keyboardType: TextInputType.number,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
@@ -174,7 +174,7 @@ class _TestScreenState extends State<TestScreen> {
                                   return null;
                                 },
                               ),
-                              SizedBox(height: 20),
+                              const SizedBox(height: 20),
                             ],
                           );
                         },
@@ -209,7 +209,7 @@ class _TestScreenState extends State<TestScreen> {
                             setState(() {});
                           }
                         },
-                        child: Text('Kaydet'),
+                        child: const Text('Kaydet'),
                       ),
                     ],
                   ),
@@ -220,7 +220,7 @@ class _TestScreenState extends State<TestScreen> {
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      icon: Icon(Icons.close),
+                      icon: const Icon(Icons.close),
                     ),
                   ),
                 ],

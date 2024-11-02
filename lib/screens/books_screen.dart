@@ -4,37 +4,39 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'archiveService.dart'; // ArchiveService sınıfını ekleyin
 
-class MoviesScreen extends StatefulWidget {
+class BooksScreen extends StatefulWidget {
+  const BooksScreen({super.key});
+
   @override
-  State<MoviesScreen> createState() => _MoviesScreenState();
+  State<BooksScreen> createState() => _BooksScreenState();
 }
 
-class _MoviesScreenState extends State<MoviesScreen> {
+class _BooksScreenState extends State<BooksScreen> {
   late ArchiveService archiveService;
-  List<String> archivedMovieIds = []; // Arşivlenmiş filmlerin ID'lerini tutacak
+  List<String> archivedBookIds = []; // Arşivlenmiş kitapların ID'lerini tutacak
 
   @override
   void initState() {
     super.initState();
     archiveService = ArchiveService(); // Arşiv servisini başlat
-    _loadArchivedMovies(); // Arşivli filmleri yükle
+    _loadArchivedBooks(); // Arşivli kitapları yükle
   }
 
-  Future<void> _loadArchivedMovies() async {
+  Future<void> _loadArchivedBooks() async {
     final userId = FirebaseAuth.instance.currentUser!.uid;
     var snapshot = await FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
         .collection('archive')
-        .doc('movies')
+        .doc('books')
         .get();
 
     if (snapshot.exists) {
       var data = snapshot.data();
-      if (data != null && data['movies'] != null) {
+      if (data != null && data['books'] != null) {
         setState(() {
-          archivedMovieIds = List<String>.from(data['movies']
-              .map((movie) => movie['Film Adı'])); // Film isimlerini alın
+          archivedBookIds = List<String>.from(data['books']
+              .map((book) => book['Kitap Adı'])); // Kitap isimlerini alın
         });
       }
     }
@@ -44,22 +46,22 @@ class _MoviesScreenState extends State<MoviesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Filmler"),
+        title: const Text("Kitaplar"),
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('movies').snapshots(),
+        stream: FirebaseFirestore.instance.collection('books').snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          var movies = snapshot.data!.docs; // Filmleri al
+          var books = snapshot.data!.docs;
 
           return ListView.builder(
-            itemCount: movies.length,
+            itemCount: books.length,
             itemBuilder: (context, index) {
-              var movie = movies[index].data(); // Film verisini al
-              String movieTitle = movie['Film Adı'] ?? 'No Title';
+              var book = books[index].data(); // Kitap verisini al
+              String bookTitle = book['Kitap Adı'] ?? 'No Title';
 
               return Container(
                 padding: const EdgeInsets.all(16.0),
@@ -74,7 +76,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
                 child: Row(
                   children: [
                     const Icon(
-                      FontAwesomeIcons.film, // Film ikonu
+                      FontAwesomeIcons.book, // Kitap ikonu
                       color: Colors.black,
                     ),
                     const SizedBox(width: 10), // İkon ile yazı arası boşluk
@@ -83,7 +85,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            movieTitle,
+                            bookTitle,
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
@@ -94,8 +96,8 @@ class _MoviesScreenState extends State<MoviesScreen> {
                       ),
                     ),
                     IconButton(
-                      icon: archivedMovieIds
-                              .contains(movieTitle) // Şarkı arşivdeyse
+                      icon: archivedBookIds
+                              .contains(bookTitle) // Şarkı arşivdeyse
                           ? const Icon(Icons.check_circle,
                               color: Colors
                                   .green) // Arşivdeyse yeşil onay ikonu göster
@@ -103,15 +105,16 @@ class _MoviesScreenState extends State<MoviesScreen> {
                               color: Colors
                                   .black), // Arşivde değilse ekleme butonu göster
                       onPressed: () async {
-                        if (!archivedMovieIds.contains(movieTitle)) {
+                        if (!archivedBookIds.contains(bookTitle)) {
                           // Sadece arşivde değilse ekle
-                          await archiveService.addMovieToArchive(movie);
+                          await archiveService.addBookToArchive(book);
                           setState(() {
-                            archivedMovieIds.add(movieTitle); // Durumu güncelle
+                            archivedBookIds.add(bookTitle); // Durumu güncelle
                           });
                         }
                       },
                     ),
+
                     IconButton(
                       icon:
                           const Icon(Icons.favorite_border, color: Colors.red),

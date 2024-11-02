@@ -33,7 +33,6 @@ class Auth {
       }
       return user;
     } catch (e) {
-      print("Error creating user: $e");
       throw Exception("Failed to create user: $e");
     }
   }
@@ -81,7 +80,6 @@ class Auth {
 
       return userCredential.user;
     } catch (e) {
-      print("Error signing in with Google: $e");
       throw Exception("Failed to sign in with Google: $e");
     }
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_application/screens/ai_screen.dart';
+
+import 'package:flutter_application/screens/archiveService.dart';
 import 'firebase_options.dart';
 import 'screens/login_screen.dart';
 import 'screens/onboarding_screen.dart';
@@ -12,6 +13,8 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  ArchiveService archiveService = ArchiveService();
+  await archiveService.createUserArchive();
   runApp(const MyApp());
 }
 

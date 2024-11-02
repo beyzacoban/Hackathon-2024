@@ -28,6 +28,8 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
     _loadCurrentUserProfile();
   }
 
+  
+
   Future<void> _loadCurrentUserProfile() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {

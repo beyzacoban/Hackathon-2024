@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application/main.dart';
+
 import 'package:flutter_application/screens/ai_screen.dart';
 import 'package:flutter_application/screens/library_screen.dart';
 import 'package:flutter_application/screens/message_screen.dart';
 import 'package:flutter_application/screens/movies_screen.dart';
-import 'package:flutter_application/screens/musics_screen.dart';
+import 'package:flutter_application/screens/songs_screen.dart';
 import 'package:flutter_application/screens/plan_screen.dart';
 import 'package:flutter_application/screens/settings_screen.dart';
+import 'package:flutter_application/screens/books_screen.dart';
 import 'package:flutter_application/screens/test_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -117,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const AiScreen(),
+                                builder: (context) => const LibraryScreen(),
                               ))
                         },
                       ),
@@ -159,7 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const MoviesScreen(),
+                                builder: (context) => MoviesScreen(),
                               ));
                         },
                       ),
@@ -180,7 +181,28 @@ class _HomeScreenState extends State<HomeScreen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const MusicsScreen(),
+                                builder: (context) => SongsScreen(),
+                              ));
+                        },
+                      ),
+                      ListTile(
+                        title: const Text(
+                          "Kitaplar",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        leading: const Icon(
+                          Icons.menu_book_outlined,
+                          size: 25,
+                          color: Colors.black,
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => BooksScreen(),
                               ));
                         },
                       ),
