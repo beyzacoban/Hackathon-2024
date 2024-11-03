@@ -131,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         drawer: _buildDrawer(context),
         body: posts.isEmpty
-            ? const Center(child: CircularProgressIndicator())
+            ? const Center()
             : ListView.builder(
                 itemCount: posts.length,
                 itemBuilder: (context, index) {
@@ -164,8 +164,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   _buildDrawerItem(
                     context,
-                    title: "Kitaplığım",
-                    icon: Icons.comment,
+                    title: "Arşiv",
+                    icon: Icons.folder_copy_rounded,
                     destination: const LibraryScreen(),
                   ),
                   _buildDrawerItem(
@@ -188,20 +188,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   _buildDrawerItem(
                     context,
-                    title: "Kronometre",
-                    icon: Icons.timer,
-                    destination: const TimerScreen(),
-                  ),
-                  _buildDrawerItem(
-                    context,
                     title: "Kitaplar",
                     icon: Icons.menu_book_outlined,
                     destination: const BooksScreen(),
                   ),
                   _buildDrawerItem(
                     context,
-                    title: "Sor",
-                    icon: Icons.comment,
+                    title: "Kronometre",
+                    icon: Icons.timer,
+                    destination: const TimerScreen(),
+                  ),
+                  _buildDrawerItem(
+                    context,
+                    title: "AI Asistanım",
+                    icon: Icons.smart_toy,
                     destination: const AiScreen(),
                   ),
                   _buildDrawerItem(
@@ -223,7 +223,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Container(
       height: MediaQuery.of(context).size.height / 10,
       width: MediaQuery.of(context).size.width,
-      color: Colors.black,
+      color: Colors.blueGrey[300],
       child: const Center(
         child: Text(
           "STUDY",

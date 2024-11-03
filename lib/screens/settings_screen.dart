@@ -104,7 +104,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
           centerTitle: true,
-          backgroundColor: Colors.blueGrey[100],
+          backgroundColor: Colors.blueGrey[300],
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
