@@ -66,7 +66,7 @@ class _PostSharingScreenState extends State<PostSharingScreen> {
         userId: currentUser.uid,
         username: userInfo['username'],
         name: userInfo['name'],
-        profileImageUrl: userInfo['profileImageUrl'],
+        profileImageUrl: userInfo['profileImage'],
       );
 
       try {
@@ -96,6 +96,7 @@ class _PostSharingScreenState extends State<PostSharingScreen> {
         return {
           'username': data['username'] ?? 'Anonim',
           'name': data['name'] ?? 'Anonim',
+          'profileImage': data['profileImage'] ?? 'Null',
         };
       }
     } catch (e) {

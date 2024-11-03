@@ -297,9 +297,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           child: CircleAvatar(
                                             radius: 18,
                                             backgroundColor: Colors.grey[300],
-                                            backgroundImage: post.imageUrl !=
+                                            backgroundImage: post
+                                                        .profileImageUrl !=
                                                     null
-                                                ? NetworkImage(post.imageUrl!)
+                                                ? NetworkImage(
+                                                    post.profileImageUrl!)
                                                 : const AssetImage(
                                                         "lib/assets/images/avatar.png")
                                                     as ImageProvider<Object>?,

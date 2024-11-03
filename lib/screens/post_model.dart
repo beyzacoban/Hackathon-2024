@@ -27,7 +27,7 @@ class Post {
       'username': username, // Firebase'e kullanıcı adını gönder
       'name': name, // Firebase'e kullanıcı ismini gönder
       'profileImageUrl': profileImageUrl, // Profil resim URL'sini gönder
-      // Tarihi ISO formatında kaydet
+      
     };
   }
 
