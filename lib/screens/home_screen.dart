@@ -96,11 +96,12 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
-            "STUDY",
+            "TOHUM",
             style: TextStyle(
               fontFamily: 'KitaharaBrush',
               fontSize: 36,
               fontWeight: FontWeight.bold,
+              letterSpacing: 2.0, // Harfler arasına boşluk ekler
             ),
           ),
           centerTitle: true,
@@ -226,12 +227,13 @@ class _HomeScreenState extends State<HomeScreen> {
       color: Colors.blueGrey[300],
       child: const Center(
         child: Text(
-          "STUDY",
+          "TOHUM",
           style: TextStyle(
             fontFamily: 'KitaharaBrush',
             fontSize: 36,
             fontWeight: FontWeight.bold,
             color: Colors.white,
+            letterSpacing: 2.0, // Harfler arasına boşluk ekler
           ),
         ),
       ),
