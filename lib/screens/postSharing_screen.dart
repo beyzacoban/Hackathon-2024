@@ -32,51 +32,82 @@ class _PostSharingScreenState extends State<PostSharingScreen> {
   Future<void> _sharePost() async {
     User? currentUser = _auth.currentUser;
 
+    if (currentUser == null) {
+      _showSnackBar('User is not logged in.');
+      return;
+    }
+
+    final userInfo = await _getUserInfo(currentUser.uid);
+    if (userInfo == null) {
+      _showSnackBar('Error fetching user info.');
+      return;
+    }
+
     if (_postController.text.isNotEmpty || _image != null) {
       String? imageUrl;
 
       if (_image != null) {
-        // Resmi Firebase Storage'a yükleme
-        final storageRef = FirebaseStorage.instance
-            .ref()
-            .child('post_images/${DateTime.now().millisecondsSinceEpoch}.png');
-
-        await storageRef.putFile(File(_image!.path));
-        imageUrl = await storageRef.getDownloadURL();
+        try {
+          final storageRef = FirebaseStorage.instance.ref().child(
+              'post_images/${DateTime.now().millisecondsSinceEpoch}.png');
+          await storageRef.putFile(File(_image!.path));
+          imageUrl = await storageRef.getDownloadURL();
+        } catch (e) {
+          _showSnackBar('Error uploading image: $e');
+          return;
+        }
       }
 
-      final newPost = Post(
-        id: DateTime.now().toString(),
-        title: "Yeni Gönderi",
-        content: _postController.text,
-        imagePath: imageUrl, // Resim URL'sini gönderiye ekle
-        userId: currentUser?.uid,
-      );
-      print(newPost.toMap());
+      final postData = {
+        'content': _postController.text,
+        'imageUrl': imageUrl,
+        'userId': currentUser.uid,
+        'username': userInfo['username'],
+        'name': userInfo['name'],
+      };
 
       try {
         await FirebaseFirestore.instance
+            .collection('users')
+            .doc(currentUser.uid)
             .collection('posts')
-            .add(newPost.toMap());
+            .add(postData);
 
-        if (mounted) {
-          Navigator.of(context).pop(newPost);
-        }
+        await FirebaseFirestore.instance.collection('posts').add(postData);
+
+        _showSnackBar('Post shared successfully!');
+        Navigator.of(context).pop();
       } catch (e) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error sharing post: $e')),
-          );
-        }
-        print("error sharing post : $e");
+        _showSnackBar('Error sharing post: $e');
       }
     } else {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Please add content or an image.')),
-        );
-      }
+      _showSnackBar('Please add content or an image.');
     }
+  }
+
+  Future<Map<String, String>?> _getUserInfo(String userId) async {
+    try {
+      DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
+
+      if (userSnapshot.exists) {
+        final data = userSnapshot.data() as Map<String, dynamic>;
+        return {
+          'username': data['username'] ?? 'Unknown',
+          'name': data['name'] ?? 'Unknown',
+        };
+      }
+    } catch (e) {
+      print('Error fetching user info: $e');
+    }
+    return null;
+  }
+
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
@@ -104,7 +135,7 @@ class _PostSharingScreenState extends State<PostSharingScreen> {
               keyboardType: TextInputType.multiline,
               textInputAction: TextInputAction.newline,
               decoration: InputDecoration(
-                hintText: "What's on your mind?",
+                hintText: "Neler Düşünüyorsun?",
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -125,7 +156,7 @@ class _PostSharingScreenState extends State<PostSharingScreen> {
             ElevatedButton.icon(
               onPressed: _pickImage,
               icon: const Icon(Icons.image),
-              label: const Text("Add Image"),
+              label: const Text("Resim Ekle"),
             ),
           ],
         ),

@@ -12,27 +12,32 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final List<Map<String, String>> onboardingData = [
     {
       "title": "Sınav Asistanı",
-      "body": "Sınav hazırlığınızı daha etkili hale getirin! Planlama, hedef belirleme ve daha fazlası sizi bekliyor.",
+      "body":
+          "Sınav hazırlığınızı daha etkili hale getirin! Planlama, hedef belirleme ve daha fazlası sizi bekliyor.",
       "icon": "school"
     },
     {
       "title": "Hedef Belirleme",
-      "body": "Başarıya ulaşmak için hedeflerinizi kolayca belirleyin ve takip edin.",
+      "body":
+          "Başarıya ulaşmak için hedeflerinizi kolayca belirleyin ve takip edin.",
       "icon": "flag"
     },
     {
       "title": "Soru Sorun",
-      "body": "Aklınıza takılan soruları anında yapay zekaya sorun ve hızlı cevaplar alın.",
+      "body":
+          "Aklınıza takılan soruları anında yapay zekaya sorun ve hızlı cevaplar alın.",
       "icon": "help_outline"
     },
     {
       "title": "Yapay Zeka Önerileri",
-      "body": "Yapay zeka destekli önerilerle en iyi çalışma yöntemlerinizi keşfedin ve sınav başarınızı artırın.",
+      "body":
+          "Yapay zeka destekli önerilerle en iyi çalışma yöntemlerinizi keşfedin ve sınav başarınızı artırın.",
       "icon": "lightbulb_outline"
     },
     {
       "title": "Kayıt Olun",
-      "body": "Hemen kaydolun ve sınav asistanı ile sınav hazırlık yolculuğunuza başlayın.",
+      "body":
+          "Hemen kaydolun ve sınav asistanı ile sınav hazırlık yolculuğunuza başlayın.",
       "icon": "person_add"
     },
   ];
@@ -79,8 +84,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           return AnimatedContainer(
             duration: const Duration(milliseconds: 300),
             decoration: BoxDecoration(
-              color: index.isEven ? const Color(0xFF678FB4) : const Color(0xFF65B0B4),
-              borderRadius: BorderRadius.vertical(bottom: Radius.circular(16.0)),
+              color: index.isEven
+                  ? const Color(0xFF678FB4)
+                  : const Color(0xFF65B0B4),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.2),
@@ -137,9 +143,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          color: _currentPage.isEven ? const Color(0xFF678FB4) : const Color(0xFF65B0B4),
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(16.0)),
-        ),
+            color: _currentPage.isEven
+                ? const Color(0xFF678FB4)
+                : const Color(0xFF65B0B4),
+            border:
+                const Border(top: BorderSide(color: Colors.white, width: 2))),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
           child: Row(
@@ -148,7 +156,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => const LoginScreen()),
+                    MaterialPageRoute(
+                        builder: (context) => const LoginScreen()),
                   );
                 },
                 child: const Text(

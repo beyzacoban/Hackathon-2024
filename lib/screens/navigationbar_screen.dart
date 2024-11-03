@@ -22,7 +22,7 @@ class _NavigationbarScreenState extends State<NavigationbarScreen> {
       const HomeScreen(),
       const SearchScreen(),
       const PostSharingScreen(),
-      ProfileScreen(),
+      const ProfileScreen(),
     ];
   }
 

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_application/screens/userProfile_screen.dart';
+import 'package:intl/intl.dart';
 import 'post_model.dart'; // Post modelinizi ekleyin
 import 'follower_model.dart'; // Takipçi modelinizi ekleyin (yukarıda tanımladığınız model)
 
@@ -245,10 +246,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   // Kullanıcının gönderileri
                   StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
-                        .collection('posts')
-                        .where('userId',
-                            isEqualTo:
-                                _auth.currentUser?.uid) // userId ile filtreleme
+                        .collection('users')
+                        .doc(_auth.currentUser?.uid)
+                        .collection(
+                            'posts') // archive yerine posts koleksiyonunu kullanın
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
@@ -295,10 +296,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           child: CircleAvatar(
                                             radius: 18,
                                             backgroundColor: Colors.grey[300],
-                                            backgroundImage: profileImage !=
-                                                        null &&
-                                                    profileImage.isNotEmpty
-                                                ? NetworkImage(profileImage)
+                                            backgroundImage: post.imagePath !=
+                                                    null
+                                                ? NetworkImage(post.imagePath!)
                                                 : const AssetImage(
                                                         "lib/assets/images/avatar.png")
                                                     as ImageProvider<Object>?,
@@ -362,6 +362,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       ),
                                     ),
                                   ),
+                                  
                                 ],
                               ),
                             ),
