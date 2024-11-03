@@ -32,11 +32,10 @@ class _ArchiveMoviesScreenState extends State<ArchiveMoviesScreen> {
               itemCount: archivedMovies.length,
               itemBuilder: (context, index) {
                 var movie = archivedMovies[index];
-                return Container(
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: const BoxDecoration(
-                    border: Border(bottom: BorderSide(color: Colors.grey)),
-                  ),
+                return Card(
+                  margin: const EdgeInsets.symmetric(
+                      vertical: 8.0, horizontal: 16.0),
+                  elevation: 4,
                   child: ListTile(
                     title: Text(movie['Film Adı'] ?? 'Bilinmeyen Film'),
                     trailing: IconButton(
@@ -69,20 +68,20 @@ class _ArchiveMoviesScreenState extends State<ArchiveMoviesScreen> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(false); // Hayır seçeneği
+                Navigator.of(context).pop(false); 
               },
               child: const Text('Hayır'),
             ),
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(true); // Evet seçeneği
+                Navigator.of(context).pop(true);
               },
               child: const Text('Evet'),
             ),
           ],
         );
       },
-    ).then((value) => value ?? false); // Null kontrolü
+    ).then((value) => value ?? false); 
   }
 
   Future<void> _deleteMovie(Map<String, dynamic> movie) async {

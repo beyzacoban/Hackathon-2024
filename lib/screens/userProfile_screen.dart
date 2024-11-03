@@ -2,10 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'chat_screen.dart';
-import 'post_model.dart'; // Post modelinizi ekleyin
+import 'post_model.dart'; 
 
 class UserProfileScreen extends StatefulWidget {
-  final String userId; // Başka bir kullanıcının userId'si
+  final String userId; 
 
   const UserProfileScreen({Key? key, required this.userId}) : super(key: key);
 
@@ -23,7 +23,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Future<Map<String, dynamic>?> _getUserProfile() async {
     DocumentSnapshot userDoc =
         await _firestore.collection('users').doc(widget.userId).get();
-    return userDoc.data() as Map<String, dynamic>?; // Profil verilerini al
+    return userDoc.data() as Map<String, dynamic>?; 
   }
 
   Future<void> _checkIfFollowing() async {
@@ -64,7 +64,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       // Takipten çık
       await followingRef.delete(); // Kullanıcıyı takipten çık
     }
-    
   }
 
   @override
@@ -174,7 +173,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor:
-                                  isFollowing ? Colors.white : Colors.blue,
+                                  isFollowing ? Colors.white : Colors.black,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),

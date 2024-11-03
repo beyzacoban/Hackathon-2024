@@ -21,14 +21,14 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   String? _selectedClassLevel;
+  final TextEditingController _targetSchoolController =
+      TextEditingController(); // Target school controller
 
   @override
   void initState() {
     super.initState();
     _loadCurrentUserProfile();
   }
-
-  
 
   Future<void> _loadCurrentUserProfile() async {
     final user = FirebaseAuth.instance.currentUser;
@@ -42,6 +42,8 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
         _nameController.text = data['name'] ?? '';
         _usernameController.text = data['username'] ?? '';
         _selectedClassLevel = data['classLevel'] ?? '9.Sınıf';
+        _targetSchoolController.text = data['targetSchool'] ?? '';
+
         setState(() {
           _profileImageUrl = data['profileImage'] ?? '';
         });
@@ -115,7 +117,9 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
         : _usernameController.text.trim();
     final classLevel = _selectedClassLevel ??
         (currentData != null ? currentData['classLevel'] ?? '' : '');
-
+    final goal = _nameController.text.trim().isEmpty
+        ? (currentData != null ? currentData['targetSchool'] ?? '' : '')
+        : _nameController.text.trim();
     String? imageUrl =
         currentData != null ? currentData['profileImage'] ?? '' : '';
 
@@ -127,7 +131,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Resim yüklenemedi!')),
         );
-        return;
+        return;.
       }
     }
 
@@ -137,6 +141,9 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
       'username': username,
       'profileImage': imageUrl ?? '',
       'classLevel': classLevel,
+      'targetSchool': _targetSchoolController.text.trim().isEmpty
+          ? (currentData != null ? currentData['targetSchool'] ?? '' : '')
+          : _targetSchoolController.text.trim(), // Add targetSchool here
     });
 
     print("Kullanıcı profili başarıyla kaydedildi.");
@@ -305,6 +312,25 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                           _selectedClassLevel = newValue;
                         });
                       },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10.0, 8.0, 10.0, 8.0),
+                    child: TextField(
+                      controller: _targetSchoolController,
+                      decoration: const InputDecoration(
+                          hintText: "Hedeflediği Okul",
+                          labelText: "Hedeflediği Okul",
+                          labelStyle: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 85, 77, 77),
+                          ),
+                          border: OutlineInputBorder()),
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                   ElevatedButton(

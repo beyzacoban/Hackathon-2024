@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'archiveService.dart'; // ArchiveService sınıfını ekleyin
+import 'archiveService.dart';
 
 class MoviesScreen extends StatefulWidget {
   @override
@@ -11,13 +11,14 @@ class MoviesScreen extends StatefulWidget {
 
 class _MoviesScreenState extends State<MoviesScreen> {
   late ArchiveService archiveService;
-  List<String> archivedMovieIds = []; // Arşivlenmiş filmlerin ID'lerini tutacak
-
+  List<String> archivedMovieIds = [];
+  Set<String> favoriteMovies = {}; // Favori kitapların ID'lerini tutacak
   @override
   void initState() {
     super.initState();
-    archiveService = ArchiveService(); // Arşiv servisini başlat
-    _loadArchivedMovies(); // Arşivli filmleri yükle
+    archiveService = ArchiveService();
+    _loadArchivedMovies();
+    _loadFavoriteMovies();
   }
 
   Future<void> _loadArchivedMovies() async {
@@ -33,10 +34,48 @@ class _MoviesScreenState extends State<MoviesScreen> {
       var data = snapshot.data();
       if (data != null && data['movies'] != null) {
         setState(() {
-          archivedMovieIds = List<String>.from(data['movies']
-              .map((movie) => movie['Film Adı'])); // Film isimlerini alın
+          archivedMovieIds = List<String>.from(
+              data['movies'].map((movie) => movie['Film Adı']));
         });
       }
+    }
+  }
+
+  Future<void> _loadFavoriteMovies() async {
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+    var snapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('favorites')
+        .get();
+
+    setState(() {
+      favoriteMovies = snapshot.docs
+          .map((doc) => doc.id) // Favori kitapların ID'lerini al
+          .toSet();
+    });
+  }
+
+  Future<void> _toggleFavorite(String movieTitle) async {
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+    final docRef = FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('favorites')
+        .doc(movieTitle);
+
+    if (favoriteMovies.contains(movieTitle)) {
+      // Favorilerden çıkar
+      await docRef.delete();
+      setState(() {
+        favoriteMovies.remove(movieTitle);
+      });
+    } else {
+      // Favorilere ekle
+      await docRef.set({'timestamp': FieldValue.serverTimestamp()});
+      setState(() {
+        favoriteMovies.add(movieTitle);
+      });
     }
   }
 
@@ -44,7 +83,13 @@ class _MoviesScreenState extends State<MoviesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Filmler"),
+        title: const Text("FİLMLER",
+            style: TextStyle(
+              fontFamily: 'Lorjuk',
+              fontWeight: FontWeight.bold,
+              fontSize: 30,
+            )),
+        backgroundColor: Colors.blueGrey[300],
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection('movies').snapshots(),
@@ -53,12 +98,12 @@ class _MoviesScreenState extends State<MoviesScreen> {
             return const Center(child: CircularProgressIndicator());
           }
 
-          var movies = snapshot.data!.docs; // Filmleri al
+          var movies = snapshot.data!.docs;
 
           return ListView.builder(
             itemCount: movies.length,
             itemBuilder: (context, index) {
-              var movie = movies[index].data(); // Film verisini al
+              var movie = movies[index].data();
               String movieTitle = movie['Film Adı'] ?? 'No Title';
 
               return Container(
@@ -66,18 +111,18 @@ class _MoviesScreenState extends State<MoviesScreen> {
                 decoration: BoxDecoration(
                   border: Border(
                     bottom: BorderSide(
-                      color: Colors.grey.shade300, // Alt çizgi rengi
-                      width: 1.0, // Alt çizgi kalınlığı
+                      color: Colors.grey.shade300,
+                      width: 1.0,
                     ),
                   ),
                 ),
                 child: Row(
                   children: [
                     const Icon(
-                      FontAwesomeIcons.film, // Film ikonu
+                      FontAwesomeIcons.film,
                       color: Colors.black,
                     ),
-                    const SizedBox(width: 10), // İkon ile yazı arası boşluk
+                    const SizedBox(width: 10),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,30 +139,27 @@ class _MoviesScreenState extends State<MoviesScreen> {
                       ),
                     ),
                     IconButton(
-                      icon: archivedMovieIds
-                              .contains(movieTitle) // Şarkı arşivdeyse
-                          ? const Icon(Icons.check_circle,
-                              color: Colors
-                                  .green) // Arşivdeyse yeşil onay ikonu göster
+                      icon: archivedMovieIds.contains(movieTitle)
+                          ? const Icon(Icons.check_circle, color: Colors.green)
                           : const Icon(Icons.add_circle_outlined,
-                              color: Colors
-                                  .black), // Arşivde değilse ekleme butonu göster
+                              color: Colors.black),
                       onPressed: () async {
                         if (!archivedMovieIds.contains(movieTitle)) {
-                          // Sadece arşivde değilse ekle
                           await archiveService.addMovieToArchive(movie);
                           setState(() {
-                            archivedMovieIds.add(movieTitle); // Durumu güncelle
+                            archivedMovieIds.add(movieTitle);
                           });
                         }
                       },
                     ),
                     IconButton(
-                      icon:
-                          const Icon(Icons.favorite_border, color: Colors.red),
-                      onPressed: () {
-                        // Favorilere ekle
-                      },
+                      icon: favoriteMovies.contains(movieTitle)
+                          ? const Icon(Icons.favorite,
+                              color: Colors.red) // Favori ise dolu kalp
+                          : const Icon(Icons.favorite_border,
+                              color: Colors.red), // Favori değilse boş kalp
+                      onPressed: () => _toggleFavorite(
+                          movieTitle), // Favori durumunu değişti
                     ),
                   ],
                 ),

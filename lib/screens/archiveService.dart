@@ -12,12 +12,9 @@ class ArchiveService {
       CollectionReference archive =
           _firestore.collection('users').doc(userId).collection('archive');
 
-      // Eğer arşiv yoksa, oluştur
       final archiveSnapshot = await archive.get();
       if (archiveSnapshot.docs.isEmpty) {
-        await archive.doc('songs').set({
-          'songs': [] // Boş bir şarkı listesiyle dokümanı oluştur
-        });
+        await archive.doc('songs').set({'songs': []});
         await archive.doc('movies').set({});
         await archive.doc('books').set({});
         print("Şarkı arşivi oluşturuldu.");
@@ -34,16 +31,13 @@ class ArchiveService {
       CollectionReference archive =
           _firestore.collection('users').doc(userId).collection('archive');
 
-      // Eğer şarkı dokümanı yoksa, oluştur
       DocumentReference songsDoc = archive.doc('songs');
       await songsDoc.get().then((doc) {
         if (doc.exists) {
-          // Eğer doküman varsa, şarkıyı listeye ekle
           songsDoc.update({
             'songs': FieldValue.arrayUnion([songData])
           });
         } else {
-          // Doküman yoksa, şarkıyı ekleyerek oluştur
           songsDoc.set({
             'songs': [songData]
           });
@@ -59,16 +53,13 @@ class ArchiveService {
       CollectionReference archive =
           _firestore.collection('users').doc(userId).collection('archive');
 
-      // Eğer şarkı dokümanı yoksa, oluştur
       DocumentReference moviesDoc = archive.doc('movies');
       await moviesDoc.get().then((doc) {
         if (doc.exists) {
-          // Eğer doküman varsa, şarkıyı listeye ekle
           moviesDoc.update({
             'movies': FieldValue.arrayUnion([movieData])
           });
         } else {
-          // Doküman yoksa, şarkıyı ekleyerek oluştur
           moviesDoc.set({
             'movies': [movieData]
           });
@@ -84,16 +75,13 @@ class ArchiveService {
       CollectionReference archive =
           _firestore.collection('users').doc(userId).collection('archive');
 
-      // Eğer şarkı dokümanı yoksa, oluştur
       DocumentReference booksDoc = archive.doc('books');
       await booksDoc.get().then((doc) {
         if (doc.exists) {
-          // Eğer doküman varsa, şarkıyı listeye ekle
           booksDoc.update({
             'books': FieldValue.arrayUnion([bookData])
           });
         } else {
-          // Doküman yoksa, şarkıyı ekleyerek oluştur
           booksDoc.set({
             'books': [bookData]
           });

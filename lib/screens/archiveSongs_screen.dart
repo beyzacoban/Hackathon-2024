@@ -32,11 +32,9 @@ class _ArchiveSongsScreenState extends State<ArchiveSongsScreen> {
               itemCount: archivedSongs.length,
               itemBuilder: (context, index) {
                 var song = archivedSongs[index];
-                return Container(
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: const BoxDecoration(
-                    border: Border(bottom: BorderSide(color: Colors.grey)),
-                  ),
+                return Card(
+                  margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                  elevation: 4,
                   child: ListTile(
                     title: Text(song['Şarkı Adı'] ?? 'Bilinmeyen Şarkı'),
                     trailing: IconButton(
@@ -64,8 +62,7 @@ class _ArchiveSongsScreenState extends State<ArchiveSongsScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Sil?'),
-          content: const Text(
-              'Bu şarkıyı arşivden silmek istediğinize emin misiniz?'),
+          content: const Text('Bu şarkıyı arşivden silmek istediğinize emin misiniz?'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
@@ -87,7 +84,6 @@ class _ArchiveSongsScreenState extends State<ArchiveSongsScreen> {
 
   Future<void> _deleteSong(Map<String, dynamic> song) async {
     final userId = FirebaseAuth.instance.currentUser!.uid;
-
     DocumentReference docRef = FirebaseFirestore.instance
         .collection('users')
         .doc(userId)

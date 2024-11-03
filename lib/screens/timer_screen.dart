@@ -12,34 +12,34 @@ class TimerScreen extends StatefulWidget {
 }
 
 class _TimerScreenState extends State<TimerScreen> {
-  Duration _duration = const Duration(); // Mevcut süre
+  Duration _duration = const Duration(); 
   Timer? _timer;
   bool _isRunning = false;
-  Duration _totalDuration = const Duration(); // Günlük toplam süre
-  Duration _weeklyDuration = const Duration(); // Haftalık toplam süre
-  Duration _monthlyDuration = const Duration(); // Aylık toplam süre
-  Duration _yearlyDuration = const Duration(); // Yıllık toplam süre
-  Duration _overallTotalDuration = const Duration(); // Toplam süre
-  DateTime _lastSavedDate = DateTime.now(); // Son kaydedilen tarih
+  Duration _totalDuration = const Duration(); 
+  Duration _weeklyDuration = const Duration(); 
+  Duration _monthlyDuration = const Duration();
+  Duration _yearlyDuration = const Duration(); 
+  Duration _overallTotalDuration = const Duration();
+  DateTime _lastSavedDate = DateTime.now(); 
 
   List<Duration> _weeklyDurations =
-      List.filled(7, const Duration()); // Haftalık süreler
+      List.filled(7, const Duration()); 
   List<Duration> _monthlyDurations =
-      List.filled(31, const Duration()); // Aylık süreler
+      List.filled(31, const Duration()); 
   List<Duration> _yearlyDurations =
-      List.filled(12, const Duration()); // Her ay için yıllık süreler
+      List.filled(12, const Duration()); 
   @override
   void initState() {
     super.initState();
     _loadDuration();
-    _loadWeeklyDurations(); // Haftalık süreleri yükle
+    _loadWeeklyDurations(); 
     _loadMonthlyDurations();
-    _loadYearlyDurations(); // Yıllık süreleri yükle
+    _loadYearlyDurations();
     _loadTotalDuration();
     _loadWeeklyDuration();
     _loadMonthlyDuration();
     _loadYearlyDuration();
-    _loadOverallTotalDuration(); // Toplam süreyi yükle
+    _loadOverallTotalDuration(); 
     _checkNewDay();
     _checkNewWeek();
     _checkNewMonth();
@@ -321,7 +321,15 @@ class _TimerScreenState extends State<TimerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Zamanlayıcı')),
+      appBar: AppBar(
+          title: const Text(
+        'KRONOMETRE',
+        style: TextStyle(
+          fontFamily: 'Lorjuk',
+          fontWeight: FontWeight.bold,
+          fontSize: 30,
+        ),
+      )),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

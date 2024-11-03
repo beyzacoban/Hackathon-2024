@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart'; // Firebase Storage paketi eklendi
+import 'package:firebase_storage/firebase_storage.dart'; 
 import 'post_model.dart';
 
 class PostSharingScreen extends StatefulWidget {
@@ -114,8 +114,8 @@ class _PostSharingScreenState extends State<PostSharingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Post Paylaşımı'),
-        centerTitle: true,
+        title: const Text('Paylaş'),
+        // centerTitle: true,
         backgroundColor: Colors.blueGrey[100],
         actions: [
           IconButton(
