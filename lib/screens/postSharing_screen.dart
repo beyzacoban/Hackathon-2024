@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart'; 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'post_model.dart';
 
 class PostSharingScreen extends StatefulWidget {
@@ -33,13 +33,13 @@ class _PostSharingScreenState extends State<PostSharingScreen> {
     User? currentUser = _auth.currentUser;
 
     if (currentUser == null) {
-      _showSnackBar('User is not logged in.');
+      print('User is not logged in.');
       return;
     }
 
     final userInfo = await _getUserInfo(currentUser.uid);
     if (userInfo == null) {
-      _showSnackBar('Error fetching user info.');
+      print('Error fetching user info.');
       return;
     }
 
@@ -53,7 +53,7 @@ class _PostSharingScreenState extends State<PostSharingScreen> {
           await storageRef.putFile(File(_image!.path));
           imageUrl = await storageRef.getDownloadURL();
         } catch (e) {
-          _showSnackBar('Error uploading image: $e');
+          _showSnackBar('Yüklenemedi');
           return;
         }
       }
@@ -75,13 +75,12 @@ class _PostSharingScreenState extends State<PostSharingScreen> {
             .doc(postId)
             .set(post.toMap());
 
-        _showSnackBar('Post shared successfully!');
         Navigator.of(context).pop();
       } catch (e) {
-        _showSnackBar('Error sharing post: $e');
+        print('Error sharing post: $e');
       }
     } else {
-      _showSnackBar('Please add content or an image.');
+      print('Please add content or an image.');
     }
   }
 
@@ -95,8 +94,8 @@ class _PostSharingScreenState extends State<PostSharingScreen> {
       if (userSnapshot.exists) {
         final data = userSnapshot.data() as Map<String, dynamic>;
         return {
-          'username': data['username'] ?? 'Unknown',
-          'name': data['name'] ?? 'Unknown',
+          'username': data['username'] ?? 'Anonim',
+          'name': data['name'] ?? 'Anonim',
         };
       }
     } catch (e) {

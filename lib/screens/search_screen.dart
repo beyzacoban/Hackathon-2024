@@ -57,7 +57,7 @@ class _SearchScreenState extends State<SearchScreen> {
               searchUsernames(value);
             },
             decoration: InputDecoration(
-              hintText: "Search user-name...",
+              hintText: "Kullanıcı Ara",
               hintStyle: TextStyle(color: Colors.grey[600]),
               prefixIcon: Icon(Icons.search, color: Colors.grey[600]),
               filled: true,
@@ -71,42 +71,39 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
           ),
         ),
-        body: searchResults.isEmpty
-            ? const Center(child: Text('Kullanıcı bulunumadı!'))
-            : ListView.builder(
-                itemCount: searchResults.length,
-                itemBuilder: (context, index) {
-                  return Card(
-                    elevation: 2,
-                    margin: const EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 16.0),
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        backgroundColor: Colors.black,
-                        child: Text(
-                          getInitials(searchResults[index]['username']),
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                      ),
-                      title: Text(
-                        searchResults[index]['username'],
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      trailing:
-                          Icon(Icons.arrow_forward, color: Colors.grey[600]),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => UserProfileScreen(
-                                userId: searchResults[index]['userId']),
-                          ),
-                        );
-                      },
+        body: ListView.builder(
+          itemCount: searchResults.length,
+          itemBuilder: (context, index) {
+            return Card(
+              elevation: 2,
+              margin:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+              child: ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: Colors.black,
+                  child: Text(
+                    getInitials(searchResults[index]['username']),
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+                title: Text(
+                  searchResults[index]['username'],
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                trailing: Icon(Icons.arrow_forward, color: Colors.grey[600]),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => UserProfileScreen(
+                          userId: searchResults[index]['userId']),
                     ),
                   );
                 },
               ),
+            );
+          },
+        ),
       ),
     );
   }

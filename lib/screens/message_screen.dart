@@ -49,11 +49,8 @@ class _MessageScreenState extends State<MessageScreen> {
           setState(() {
             followingUsers = usernames; // Kullanıcı adlarını listeye ata
           });
-        } else {
         }
-      } else {
       }
-    } else {
     }
   }
 
@@ -93,19 +90,28 @@ class _MessageScreenState extends State<MessageScreen> {
               },
               icon: const Icon(Icons.arrow_back)),
         ),
-        body: ListView.builder(
-          itemCount: followingUsers.length,
-          itemBuilder: (context, index) {
-            final username = followingUsers[index];
-            return ListTile(
-              title: Text(username),
-              onTap: () {
-                _navigateToChat(followingUsers[index],
-                    username); // Pass both friend ID and username
-              },
-            );
-          },
-        ),
+        body: followingUsers.isEmpty // Eğer takip edilen kullanıcı yoksa
+            ? const Center()
+            : ListView.builder(
+                itemCount: followingUsers.length,
+                itemBuilder: (context, index) {
+                  final username = followingUsers[index];
+                  return ListTile(
+                    title: Text(
+                      username,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    onTap: () {
+                      _navigateToChat(followingUsers[index],
+                          username); // Pass both friend ID and username
+                    },
+                  );
+                },
+              ),
       ),
     );
   }
