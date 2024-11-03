@@ -59,6 +59,15 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> fetchPosts() async {
     try {
       List<Post> fetchedPosts = [];
+      var currentUserPostsSnapshot = await FirebaseFirestore.instance
+          .collection('posts')
+          .where('userId', isEqualTo: _auth.currentUser!.uid)
+          .get();
+
+      for (var doc in currentUserPostsSnapshot.docs) {
+        var post = Post.fromMap(doc.id, doc.data());
+        fetchedPosts.add(post);
+      }
       for (String userId in followingUsers) {
         // Kullanıcıya ait gönderileri al
         var postsSnapshot = await FirebaseFirestore.instance
