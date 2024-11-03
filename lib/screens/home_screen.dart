@@ -57,28 +57,38 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> fetchPosts() async {
-  try {
-    List<Post> fetchedPosts = [];
-    for (String userId in followingUsers) {
-      // Burada userId kullanarak filtreleme yapıyoruz
-      var postsSnapshot = await FirebaseFirestore.instance
-          .collection('posts')
-          .where('userId', isEqualTo: userId) // Takip edilen kullanıcı ID'si ile filtreleme
-          .get();
+    try {
+      List<Post> fetchedPosts = [];
+      for (String userId in followingUsers) {
+        // Kullanıcıya ait gönderileri al
+        var postsSnapshot = await FirebaseFirestore.instance
+            .collection('posts')
+            .where('userId', isEqualTo: userId)
+            .get();
 
-      for (var doc in postsSnapshot.docs) {
-        fetchedPosts.add(Post.fromMap(doc.id, doc.data()));
+        // Kullanıcı bilgilerini al
+        var userDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userId)
+            .get();
+        String? profileImageUrl = userDoc.data()?['profileImage'];
+
+        for (var doc in postsSnapshot.docs) {
+          // Kullanıcı bilgilerini alırken post'u oluştur
+          var post = Post.fromMap(doc.id, doc.data());
+          post.profileImageUrl =
+              profileImageUrl; // Kullanıcı profil resmini atıyoruz
+          fetchedPosts.add(post); // Son olarak post'u listeye ekliyoruz
+        }
       }
+
+      setState(() {
+        posts = fetchedPosts;
+      });
+    } catch (e) {
+      print("Error fetching posts: $e");
     }
-
-    setState(() {
-      posts = fetchedPosts;
-    });
-  } catch (e) {
-    print("Error fetching posts: $e");
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -281,8 +291,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: CircleAvatar(
                       radius: 18,
                       backgroundColor: Colors.grey[300],
-                      backgroundImage: post.imageUrl != null
-                          ? NetworkImage(post.imageUrl!)
+                      backgroundImage: post.profileImageUrl != null
+                          ? NetworkImage(post.profileImageUrl!)
                           : const AssetImage("lib/assets/images/avatar.png")
                               as ImageProvider<Object>?,
                     ),

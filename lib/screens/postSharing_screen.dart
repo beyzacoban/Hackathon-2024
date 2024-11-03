@@ -66,7 +66,7 @@ class _PostSharingScreenState extends State<PostSharingScreen> {
         userId: currentUser.uid,
         username: userInfo['username'],
         name: userInfo['name'],
-        // Paylaşım zamanı
+        profileImageUrl: userInfo['profileImageUrl'],
       );
 
       try {
