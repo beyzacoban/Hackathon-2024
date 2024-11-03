@@ -86,6 +86,7 @@ class _BooksScreenState extends State<BooksScreen> {
                         children: [
                           Text(
                             bookTitle,
+                            
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.black,

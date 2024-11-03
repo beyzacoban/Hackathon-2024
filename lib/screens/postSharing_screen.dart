@@ -58,22 +58,22 @@ class _PostSharingScreenState extends State<PostSharingScreen> {
         }
       }
 
-      final postData = {
-        'content': _postController.text,
-        'imageUrl': imageUrl,
-        'userId': currentUser.uid,
-        'username': userInfo['username'],
-        'name': userInfo['name'],
-      };
+      String postId = FirebaseFirestore.instance.collection('posts').doc().id;
+      final post = Post(
+        id: postId,
+        content: _postController.text,
+        imageUrl: imageUrl,
+        userId: currentUser.uid,
+        username: userInfo['username'],
+        name: userInfo['name'],
+        // Paylaşım zamanı
+      );
 
       try {
         await FirebaseFirestore.instance
-            .collection('users')
-            .doc(currentUser.uid)
             .collection('posts')
-            .add(postData);
-
-        await FirebaseFirestore.instance.collection('posts').add(postData);
+            .doc(postId)
+            .set(post.toMap());
 
         _showSnackBar('Post shared successfully!');
         Navigator.of(context).pop();
