@@ -12,34 +12,31 @@ class TimerScreen extends StatefulWidget {
 }
 
 class _TimerScreenState extends State<TimerScreen> {
-  Duration _duration = const Duration(); 
+  Duration _duration = const Duration();
   Timer? _timer;
   bool _isRunning = false;
-  Duration _totalDuration = const Duration(); 
-  Duration _weeklyDuration = const Duration(); 
+  Duration _totalDuration = const Duration();
+  Duration _weeklyDuration = const Duration();
   Duration _monthlyDuration = const Duration();
-  Duration _yearlyDuration = const Duration(); 
+  Duration _yearlyDuration = const Duration();
   Duration _overallTotalDuration = const Duration();
-  DateTime _lastSavedDate = DateTime.now(); 
+  DateTime _lastSavedDate = DateTime.now();
 
-  List<Duration> _weeklyDurations =
-      List.filled(7, const Duration()); 
-  List<Duration> _monthlyDurations =
-      List.filled(31, const Duration()); 
-  List<Duration> _yearlyDurations =
-      List.filled(12, const Duration()); 
+  List<Duration> _weeklyDurations = List.filled(7, const Duration());
+  List<Duration> _monthlyDurations = List.filled(31, const Duration());
+  List<Duration> _yearlyDurations = List.filled(12, const Duration());
   @override
   void initState() {
     super.initState();
     _loadDuration();
-    _loadWeeklyDurations(); 
+    _loadWeeklyDurations();
     _loadMonthlyDurations();
     _loadYearlyDurations();
     _loadTotalDuration();
     _loadWeeklyDuration();
     _loadMonthlyDuration();
     _loadYearlyDuration();
-    _loadOverallTotalDuration(); 
+    _loadOverallTotalDuration();
     _checkNewDay();
     _checkNewWeek();
     _checkNewMonth();
@@ -322,14 +319,17 @@ class _TimerScreenState extends State<TimerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text(
-        'KRONOMETRE',
-        style: TextStyle(
-          fontFamily: 'Lorjuk',
-          fontWeight: FontWeight.bold,
-          fontSize: 30,
+        title: const Text(
+          'KRONOMETRE',
+          style: TextStyle(
+            fontFamily: 'Lorjuk',
+            fontWeight: FontWeight.bold,
+            fontSize: 30,
+          ),
         ),
-      )),
+        backgroundColor:
+            Colors.blueGrey[300], // Set AppBar background color here
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -340,8 +340,8 @@ class _TimerScreenState extends State<TimerScreen> {
               height: 200, // Increased height for the circle
               decoration: const BoxDecoration(
                 shape: BoxShape.circle, // Make the container circular
-                color: Color.fromARGB(
-                    255, 81, 206, 108), // Change the background color to purple
+                color: Color.fromARGB(255, 81, 206, 108),
+                // Change the background color to purple
               ),
               child: Center(
                 // Center the text inside the container
