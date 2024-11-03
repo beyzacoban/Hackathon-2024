@@ -309,12 +309,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                         ],
                                       ),
                                     ),
-                                    if (post.imagePath != null)
+                                    if (post.imageUrl != null)
                                       Padding(
                                         padding:
                                             const EdgeInsets.only(bottom: 12.0),
                                         child: Image.network(
-                                          post.imagePath!,
+                                          post.imageUrl!,
                                           fit: BoxFit.cover,
                                         ),
                                       ),

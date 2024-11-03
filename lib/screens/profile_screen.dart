@@ -97,6 +97,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       setState(() {
         _posts.removeWhere((post) => post.id == postId);
       });
+      print('Silinmeye çalışılan post ID: $postId');
 
       print('Post silindi');
     } catch (e) {
@@ -246,10 +247,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   // Kullanıcının gönderileri
                   StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
-                        .collection('users')
-                        .doc(_auth.currentUser?.uid)
-                        .collection(
-                            'posts') // archive yerine posts koleksiyonunu kullanın
+                        .collection('posts')
+                        .where('userId',
+                            isEqualTo: _auth.currentUser!
+                                .uid) // archive yerine posts koleksiyonunu kullanın
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
@@ -296,9 +297,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           child: CircleAvatar(
                                             radius: 18,
                                             backgroundColor: Colors.grey[300],
-                                            backgroundImage: post.imagePath !=
+                                            backgroundImage: post.imageUrl !=
                                                     null
-                                                ? NetworkImage(post.imagePath!)
+                                                ? NetworkImage(post.imageUrl!)
                                                 : const AssetImage(
                                                         "lib/assets/images/avatar.png")
                                                     as ImageProvider<Object>?,
@@ -316,6 +317,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         PopupMenuButton<String>(
                                           onSelected: (String result) {
                                             if (result == 'delete') {
+                                              print(post.id);
                                               _deletePost(post.id);
                                             }
                                           },
@@ -330,12 +332,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       ],
                                     ),
                                   ),
-                                  if (post.imagePath != null)
+                                  if (post.imageUrl != null)
                                     Padding(
                                       padding:
                                           const EdgeInsets.only(bottom: 12.0),
                                       child: Image.network(
-                                        post.imagePath!,
+                                        post.imageUrl!,
                                         fit: BoxFit.cover,
                                       ),
                                     ),
@@ -362,7 +364,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       ),
                                     ),
                                   ),
-                                  
                                 ],
                               ),
                             ),

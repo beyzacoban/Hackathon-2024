@@ -131,7 +131,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Resim yüklenemedi!')),
         );
-        return;.
+        return;
       }
     }
 
