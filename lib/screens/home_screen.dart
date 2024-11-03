@@ -48,10 +48,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 followingSnapshot.docs.map((doc) => doc.id).toList();
           });
         }
-
-        await fetchPosts();
       } catch (e) {
-        print("Error fetching following users: $e");
+        _showErrorSnackBar("Error fetching following users: $e");
       }
     }
   }

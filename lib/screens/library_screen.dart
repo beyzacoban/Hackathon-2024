@@ -34,12 +34,12 @@ class _LibraryScreenState extends State<LibraryScreen>
           title: const Text(
             "KİTAPLIĞIM",
             style: TextStyle(
-              fontFamily: 'Lorjuk',
-              fontWeight: FontWeight.bold,
-            ),
+                fontFamily: 'Lorjuk',
+                fontWeight: FontWeight.bold,
+                fontSize: 30),
           ),
           centerTitle: true,
-          backgroundColor: Colors.blueGrey[100],
+          backgroundColor: Colors.blueGrey[300],
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
@@ -50,13 +50,40 @@ class _LibraryScreenState extends State<LibraryScreen>
             preferredSize: Size.fromHeight(MediaQuery.of(context).size.height /
                 16), // TabBar yüksekliğini ayarlayın
             child: Container(
-              color: Colors.teal[200], // TabBar'ın arka plan rengi
+              color: Colors.blueGrey[300], // TabBar'ın arka plan rengi
               child: TabBar(
                 controller: _tabController,
-                tabs: const [
-                  Tab(text: "Şarkılar"),
-                  Tab(text: "Filmler"),
-                  Tab(text: "Kitaplar"),
+                labelColor: Colors.white, // Seçili tab yazı rengi
+                unselectedLabelColor:
+                    Colors.white70, // Seçilmemiş tab yazı rengi
+                tabs: [
+                  Tab(
+                    child: Text(
+                      "Şarkılar",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight:
+                              FontWeight.bold), // Yazı tipi boyutu ve kalınlığı
+                    ),
+                  ),
+                  Tab(
+                    child: Text(
+                      "Filmler",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight:
+                              FontWeight.bold), // Yazı tipi boyutu ve kalınlığı
+                    ),
+                  ),
+                  Tab(
+                    child: Text(
+                      "Kitaplar",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight:
+                              FontWeight.bold), // Yazı tipi boyutu ve kalınlığı
+                    ),
+                  ),
                 ],
               ),
             ),

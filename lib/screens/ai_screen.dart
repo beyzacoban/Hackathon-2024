@@ -113,8 +113,15 @@ class _AiScreenState extends State<AiScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('AI Assistant'),
-          backgroundColor: const Color(0xFF678FB4),
+          title: const Text(
+            'ASİSTANIM',
+            style: TextStyle(
+              fontFamily: 'Lorjuk',
+              fontWeight: FontWeight.bold,
+              fontSize: 30,
+            ),
+          ),
+          backgroundColor: Colors.blueGrey[300],
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
@@ -190,7 +197,7 @@ class _AiScreenState extends State<AiScreen> {
                       }
                     },
                     icon: const Icon(Icons.send),
-                    color: Colors.blue,
+                    color: Colors.blueGrey[300],
                   ),
                 ],
               ),
@@ -227,7 +234,7 @@ class MessageWidget extends StatelessWidget {
           child: Container(
             constraints: const BoxConstraints(maxWidth: 600),
             decoration: BoxDecoration(
-              color: isFromUser ? Colors.blue[200] : Colors.grey[300],
+              color: isFromUser ? Colors.blueGrey[200] : Colors.grey[200],
               borderRadius: BorderRadius.circular(18),
               boxShadow: const [
                 BoxShadow(

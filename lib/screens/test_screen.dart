@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert'; // JSON formatı için
+import 'dart:convert';
 
 class Deneme {
   String tur;
@@ -8,7 +8,7 @@ class Deneme {
   int dogru;
   int yanlis;
   int bos;
-  double? net; // Net özelliği eklendi
+  double? net;
 
   Deneme({
     required this.tur,
@@ -16,7 +16,7 @@ class Deneme {
     required this.dogru,
     required this.yanlis,
     required this.bos,
-    this.net, // Net opsiyonel olabilir
+    this.net,
   });
 }
 
@@ -39,7 +39,6 @@ class _TestScreenState extends State<TestScreen> {
   List<TextEditingController> dogruControllers = [];
   List<TextEditingController> yanlisControllers = [];
   List<TextEditingController> bosControllers = [];
-// Denemeleri kaydeden fonksiyon
   Future<void> kaydetDenemeler() async {
     final prefs = await SharedPreferences.getInstance();
     List<String> denemeListesiJson = denemeler.map((deneme) {
@@ -55,7 +54,6 @@ class _TestScreenState extends State<TestScreen> {
     await prefs.setStringList('denemeler', denemeListesiJson);
   }
 
-// Denemeleri okuyan fonksiyon
   Future<void> denemeleriYukle() async {
     final prefs = await SharedPreferences.getInstance();
     List<String>? denemeListesiJson = prefs.getStringList('denemeler');
@@ -78,7 +76,7 @@ class _TestScreenState extends State<TestScreen> {
   @override
   void initState() {
     super.initState();
-    denemeleriYukle(); // Uygulama başlatıldığında verileri yükler
+    denemeleriYukle();
   }
 
   void _showDenemePanel() {
@@ -102,7 +100,8 @@ class _TestScreenState extends State<TestScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       DropdownButtonFormField<String>(
-                        decoration: const InputDecoration(labelText: 'Deneme Türü'),
+                        decoration:
+                            const InputDecoration(labelText: 'Deneme Türü'),
                         items: turler.map((tur) {
                           return DropdownMenuItem(
                             value: tur,
@@ -142,7 +141,8 @@ class _TestScreenState extends State<TestScreen> {
                               ),
                               TextFormField(
                                 controller: dogruControllers[index],
-                                decoration: const InputDecoration(labelText: 'Doğru'),
+                                decoration:
+                                    const InputDecoration(labelText: 'Doğru'),
                                 keyboardType: TextInputType.number,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
@@ -165,7 +165,8 @@ class _TestScreenState extends State<TestScreen> {
                               ),
                               TextFormField(
                                 controller: bosControllers[index],
-                                decoration: const InputDecoration(labelText: 'Boş'),
+                                decoration:
+                                    const InputDecoration(labelText: 'Boş'),
                                 keyboardType: TextInputType.number,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
@@ -287,12 +288,12 @@ class _TestScreenState extends State<TestScreen> {
             title: const Text(
               "DENEMELERİM",
               style: TextStyle(
-                fontFamily: 'Lorjuk',
-                fontWeight: FontWeight.bold,
-              ),
+                  fontFamily: 'Lorjuk',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30),
             ),
             centerTitle: true,
-            backgroundColor: Colors.blueGrey[100],
+            backgroundColor: Colors.blueGrey[300],
             leading: IconButton(
                 onPressed: () {
                   Navigator.pop(context);
@@ -301,6 +302,7 @@ class _TestScreenState extends State<TestScreen> {
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: _showDenemePanel,
+            backgroundColor: Colors.blueGrey[300],
             child: const Icon(Icons.add),
           ),
           body: ListView.builder(

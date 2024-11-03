@@ -74,11 +74,11 @@ class _PlanScreenState extends State<PlanScreen> {
               style: TextStyle(
                 fontFamily: 'Lorjuk',
                 fontWeight: FontWeight.bold,
-                fontSize: 36,
+                fontSize: 30,
               ),
             ),
             centerTitle: true,
-            backgroundColor: Colors.green[300],
+            backgroundColor: Colors.blueGrey[300],
             leading: IconButton(
                 onPressed: () {
                   Navigator.pop(context);
